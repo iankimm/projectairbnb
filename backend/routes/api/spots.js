@@ -6,7 +6,7 @@ const { setTokenCookie, requireAuth } = require('../../utils/auth');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
-const { Spot, Review, SpotImage } = require('../../db/models');
+const { Spot, Review, SpotImage, Booking } = require('../../db/models');
 const review = require('../../db/models/review');
 
 const router = express.Router();
@@ -169,5 +169,48 @@ router.post('/:spotId/images', async (req, res) => {
 
 
 //BOOOOOOOOOOOOOOOKKKKKKKKKKKKKKKINNNNNNNNNNNNNNG
+//create a booking
+router.post('/:spotId/bookings', async (req, res) => {
+  const spot = await Spot.findByPk(req.params.spotId);
+
+  const { startDate, endDate } = req.body;
+
+  const { user } = req;
+
+  let userId = user.id;
+  let spotId = parseInt(req.params.spotId);
+
+  const booking = await Booking.create({startDate, endDate, userId, spotId});
+
+  const safeBooking = {
+    id: booking.id,
+    userId: booking.userId,
+    spotId: booking.spotId,
+    startDate: booking.startDate,
+    endDate: booking.endDate,
+    createdAt: booking.createdAt,
+    updatedAt: booking.updatedAt
+
+  }
+
+  await setTokenCookie(res, safeBooking);
+
+  return res.json({
+    booking : safeBooking
+  });
+})
+
+//Get all Bookings for a Spot based on the Spot's id
+router.get('/:spotId/bookings', async (req, res) => {
+  let Bookings = await Booking.findAll({where: {spotId: parseInt(req.params.spotId)}});
+  return res.json({Bookings})
+})
+
+//get all spots by Id
+router.get('/current', async (req, res) => {
+  const { user } = req;
+  let Spots = await Spot.findAll({where: {ownerId: user.id}})
+  return res.json({Spots})
+})
 
 module.exports = router;
