@@ -17,4 +17,36 @@ router.get('/current', async (req, res) => {
   return res.json({Bookings})
 })
 
+//Edit a Booking
+router.put('/:bookingId', async (req, res) => {
+  const booking = await Booking.findByPk(parseInt(req.params.bookingId));
+
+  const { startDate, endDate } = req.body;
+
+  if(!booking) {
+    res.status(404);
+    return res.json({'message': "Booking couldn't be found"})
+  }
+
+  booking.startDate = startDate;
+  booking.endDate = endDate;
+
+  booking.save();
+
+  return res.json(booking);
+})
+
+//delete a review
+router.delete('/:bookingId', async (req, res) => {
+  const booking = await Review.findByPk(req.params.bookingId);
+  if(!booking) {
+    res.status(404);
+    return res.json({"message": "Booking couldn't be found"})
+  }
+
+  await booking.destroy();
+
+  return res.json({"message": "Successfully deleted"});
+})
+
 module.exports = router;
