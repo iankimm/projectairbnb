@@ -10,7 +10,7 @@ const { Spot } = require('../../db/models');
 
 const router = express.Router();
 
-
+//create a new spot
 router.post('', async (req, res) => {
   const { address, city, state, country, lat, lng, name, description, price} = req.body;
 
@@ -39,6 +39,12 @@ router.post('', async (req, res) => {
   return res.json({
     spot: safeSpot
   });
+})
+
+//get all spots
+router.get('/', async (req, res) => {
+  let Spots = await Spot.findAll();
+  return res.json({Spots})
 })
 
 module.exports = router;
