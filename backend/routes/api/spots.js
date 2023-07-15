@@ -6,7 +6,8 @@ const { setTokenCookie, requireAuth } = require('../../utils/auth');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
-const { Spot } = require('../../db/models');
+const { Spot, Review } = require('../../db/models');
+const review = require('../../db/models/review');
 
 const router = express.Router();
 
@@ -18,7 +19,7 @@ router.post('', async (req, res) => {
 
   let ownerId = user.id;
 
-  const spot = await Spot.create({address, ownerId,city, state, country, lat, lng, name, description, price});
+  const spot = await Spot.create({address, ownerId, city, state, country, lat, lng, name, description, price});
 
   const safeSpot = {
     id: spot.id,
@@ -99,5 +100,32 @@ router.delete('/:spotId', async (req, res) => {
   return res.json({"message": "Successfully deleted"});
 })
 
+//create a review for a spot based on the spot's id
+router.post('/:spotId/reviews', async (req, res) => {
+  const spot = await Spot.findByPk(req.params.spotId);
+
+  const { review, stars } = req.body;
+
+  const { user } = req;
+
+  let userId = user.id;
+  let spotId = parseInt(req.params.spotId);
+
+  const newReview = await Review.create({review, userId, spotId, stars});
+
+  const safeReview = {
+    id: newReview.id,
+    userId: newReview.userId,
+    spotId: newReview.spotId,
+    stars: newReview.stars,
+    review: newReview.review
+  }
+
+  await setTokenCookie(res, safeReview);
+
+  return res.json({
+    newReview : safeReview
+  });
+})
 
 module.exports = router;
