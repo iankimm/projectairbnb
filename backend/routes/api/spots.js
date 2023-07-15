@@ -54,6 +54,12 @@ router.get('/current', async (req, res) => {
   return res.json({Spots})
 })
 
+//get details of a spot from an id
+router.get('/:spotId', async (req, res) => {
+  let Spots = await Spot.findByPk(parseInt(req.params.spotId));
+  return res.json({Spots});
+})
+
 //edit a spot
 router.put('/:spotId', async (req, res) => {
   const { user } = req;
@@ -63,7 +69,7 @@ router.put('/:spotId', async (req, res) => {
 
   if(!spot) {
     res.status(404);
-    return res.json({message: 'spot not found'});
+    return res.json({'message': 'spot not found'});
   }
 
   spot.address = address;
@@ -83,6 +89,10 @@ router.put('/:spotId', async (req, res) => {
 //delete a spot
 router.delete('/:spotId', async (req, res) => {
   const spot = await Spot.findByPk(req.params.spotId);
+  if(!spot) {
+    res.status(404);
+    return res.json({"message": "Spot couldn't be found"})
+  }
 
   await spot.destroy();
 
