@@ -5,7 +5,7 @@ const { setTokenCookie, requireAuth } = require('../../utils/auth');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
-const { Spot, User, Review } = require('../../db/models');
+const { Spot, User, Review, ReviewImage } = require('../../db/models');
 
 const router = express.Router();
 
@@ -51,6 +51,28 @@ router.delete('/:reviewId', async (req, res) => {
   await review.destroy();
 
   return res.json({"message": "Successfully deleted"});
+})
+
+//Add an Image to a Review based on the Review's id
+router.post('/:reviewId/images', async (req, res) => {
+  const currReview = await Review.findByPk(req.params.reviewId);
+
+  const { url } = req.body;
+
+  let reviewId = parseInt(req.params.reviewId);
+
+  const reviewImage = await ReviewImage.create({ url, reviewId});
+
+  const safeReviewImage = {
+    id: reviewImage.id,
+    url: reviewImage.url
+  }
+
+  await setTokenCookie(res, safeReviewImage);
+
+  return res.json({
+    reviewImage : safeReviewImage
+  });
 })
 
 module.exports = router;
