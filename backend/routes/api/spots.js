@@ -167,4 +167,7 @@ router.post('/:spotId/images', async (req, res) => {
   });
 })
 
+
+//BOOOOOOOOOOOOOOOKKKKKKKKKKKKKKKINNNNNNNNNNNNNNG
+
 module.exports = router;
