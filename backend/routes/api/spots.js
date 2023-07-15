@@ -47,4 +47,39 @@ router.get('/', async (req, res) => {
   return res.json({Spots})
 })
 
+//get all spots by Id
+router.get('/current', async (req, res) => {
+  const { user } = req;
+  let Spots = await Spot.findAll({where: {ownerId: user.id}})
+  return res.json({Spots})
+})
+
+//edit a spot
+router.put('/:spotId', async (req, res) => {
+  const { user } = req;
+  const spot = await Spot.findByPk(parseInt(req.params.spotId));
+
+  const { address, city, state, country, lat, lng, name, description, price} = req.body;
+
+  if(!spot) {
+    res.status(404);
+    return res.json({message: 'spot not found'});
+  }
+
+  spot.address = address;
+  spot.city = city;
+  spot.state = state;
+  spot.country = country;
+  spot.lat = lat;
+  spot.lng = lng;
+  spot.name = name;
+  spot.description = description;
+  spot.price = price;
+
+  await spot.save();
+  return res.json(spot);
+})
+
+
+
 module.exports = router;
