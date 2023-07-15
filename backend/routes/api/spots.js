@@ -80,6 +80,14 @@ router.put('/:spotId', async (req, res) => {
   return res.json(spot);
 })
 
+//delete a spot
+router.delete('/:spotId', async (req, res) => {
+  const spot = await Spot.findByPk(req.params.spotId);
+
+  await spot.destroy();
+
+  return res.json({"message": "Successfully deleted"});
+})
 
 
 module.exports = router;
