@@ -21,5 +21,24 @@ router.get('/current', async (req, res) => {
   return res.json({Reviews})
 })
 
+//Edit a Review
+router.put('/:reviewId', async (req, res) => {
+  const prevReview = await Review.findByPk(parseInt(req.params.reviewId));
+
+  const {stars, review} = req.body;
+
+  if(!prevReview) {
+    res.status(404);
+    return res.json({'message': "Review couldn't be found"})
+  }
+
+  prevReview.stars = stars;
+  prevReview.review = review;
+
+  prevReview.save();
+
+  return res.json(prevReview);
+})
+
 
 module.exports = router;
