@@ -32,7 +32,9 @@ router.post('', async (req, res) => {
     lng: spot.lng,
     name: spot.name,
     description: spot.description,
-    price: spot.price
+    price: spot.price,
+    createdAt: spot.createdAt,
+    updatedAt: spot.updatedAt
   };
 
   await setTokenCookie(res, safeSpot);
@@ -118,7 +120,9 @@ router.post('/:spotId/reviews', async (req, res) => {
     userId: newReview.userId,
     spotId: newReview.spotId,
     stars: newReview.stars,
-    review: newReview.review
+    review: newReview.review,
+    createdAt: newReview.createdAt,
+    updatedAt: newReview.updatedAt
   }
 
   await setTokenCookie(res, safeReview);
@@ -126,6 +130,16 @@ router.post('/:spotId/reviews', async (req, res) => {
   return res.json({
     newReview : safeReview
   });
+})
+
+//Get all Reviews by a Spot's id
+router.get('/:spotId/reviews', async (req, res) => {
+  let id = parseInt(req.params.spotId);
+
+  let Reviews = await Review.findAll({
+    where: {spotId : id }
+  });
+  return res.json({Reviews})
 })
 
 module.exports = router;
