@@ -6,7 +6,7 @@ const { setTokenCookie, requireAuth } = require('../../utils/auth');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
-const { Spot, Review } = require('../../db/models');
+const { Spot, Review, SpotImage } = require('../../db/models');
 const review = require('../../db/models/review');
 
 const router = express.Router();
@@ -140,6 +140,31 @@ router.get('/:spotId/reviews', async (req, res) => {
     where: {spotId : id }
   });
   return res.json({Reviews})
+})
+
+//Add an Image to a Spot based on the Spot's id
+router.post('/:spotId/images', async (req, res) => {
+  const spot = await Spot.findByPk(req.params.spotId);
+
+  const { url, preview } = req.body;
+
+  let spotId = parseInt(req.params.spotId);
+
+  const spotImage = await SpotImage.create({ url, preview, spotId});
+
+  const safeImage = {
+    id: spotImage.id,
+    preview: spotImage.preview,
+    spotId: spotImage.spotId,
+    createdAt: spotImage.createdAt,
+    updatedAt: spotImage.updatedAt
+  }
+
+  await setTokenCookie(res, safeImage);
+
+  return res.json({
+    spotImage : safeImage
+  });
 })
 
 module.exports = router;
