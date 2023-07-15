@@ -213,4 +213,7 @@ router.get('/current', async (req, res) => {
   return res.json({Spots})
 })
 
+//Add Query Filters to Get All Spots
+
+
 module.exports = router;
