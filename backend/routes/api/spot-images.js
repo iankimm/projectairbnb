@@ -11,7 +11,7 @@ const review = require('../../db/models/review');
 const router = express.Router();
 
 //delete a spot
-router.delete('/:imageId', async (req, res) => {
+router.delete('/:imageId', requireAuth, async (req, res) => {
   const spotImage = await SpotImage.findByPk(req.params.imageId);
 
   if(!spotImage) {
@@ -19,9 +19,12 @@ router.delete('/:imageId', async (req, res) => {
     return res.json({"message": "Spot Image couldn't be found"})
   }
 
-  await spotImage.destroy();
+  if(req.spot.ownerId === req.user.id){
+    await spotImage.destroy();
 
-  return res.json({"message": "Successfully deleted"});
+    res.status(200);
+    return res.json({"message": "Successfully deleted"});
+  }
 })
 
 module.exports = router;
