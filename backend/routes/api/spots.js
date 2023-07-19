@@ -34,6 +34,12 @@ router.post('/', requireAuth, async (req, res) => {
     }})
   }
 
+  const check = Spot.findOne({where: {address: address}});
+  if(check) {
+    res.status(400);
+    return res.json({"message": "address must be unique"})
+  }
+
   const spot = await Spot.create({address, ownerId, city, state, country, lat, lng, name, description, price});
 
   const print = {
