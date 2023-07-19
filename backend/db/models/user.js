@@ -31,34 +31,15 @@ module.exports = (sequelize, DataTypes) => {
               throw new Error("Cannot be an email.");
             }
           },
-          emptyValidate(value) {
-            if(value === '') {
-              throw new Error("Cannot be empty")
-            }
-          }
         }
       },
       firstName: {
         type: DataTypes.STRING,
         allowNull: false,
-        validate: {
-          emptyValidate(value) {
-            if(value === '') {
-              throw new Error("Cannot be empty")
-            }
-          }
-        }
       },
       lastName: {
         type: DataTypes.STRING,
         allowNull: false,
-        validate: {
-          emptyValidate(value) {
-            if(value === '') {
-              throw new Error("Cannot be empty")
-            }
-          }
-        }
       },
       email: {
         type: DataTypes.STRING,

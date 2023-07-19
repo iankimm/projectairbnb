@@ -123,7 +123,7 @@ router.post('/:reviewId/images', requireAuth, async (req, res) => {
   //maximum count
   const imageCount = await ReviewImage.count({
     where: {
-      reviewId: req.params.reviewId
+      reviewId: parseInt(req.params.reviewId)
     }
   })
 
