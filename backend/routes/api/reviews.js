@@ -67,7 +67,7 @@ router.put('/:reviewId', requireAuth, async (req, res) => {
 
   const { stars, review } = req.body;
 
-  if(stars < 1 || stars > 5 || review === ''){
+  if(typeof stars != 'number' ||stars < 1 || stars > 5 || review === ''){
     res.status(400);
     return res.json({
       "message": "Bad Request",
@@ -86,7 +86,7 @@ router.put('/:reviewId', requireAuth, async (req, res) => {
 
 //delete a review
 router.delete('/:reviewId', requireAuth, async (req, res) => {
-  const review = await Review.findByPk(req.params.reviewId);
+  const review = await Review.findByPk(parseInt(req.params.reviewId));
 
   if(!review) {
     res.status(404);
@@ -126,7 +126,7 @@ router.post('/:reviewId/images', requireAuth, async (req, res) => {
     }
   })
 
-  if(imageCount > 10) {
+  if(imageCount > 9) {
     res.status(403);
     return res.json({"message": "Maximum number of images for this resource was reached"})
   };
