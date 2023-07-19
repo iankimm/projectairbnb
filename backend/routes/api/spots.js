@@ -3,69 +3,295 @@ const express = require('express');
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
 
-const { check } = require('express-validator');
-const { handleValidationErrors } = require('../../utils/validation');
+const { User, Spot, SpotImage, Review, ReviewImage, Booking } = require('../../db/models');
 
-const { Spot, Review, SpotImage, Booking } = require('../../db/models');
-const review = require('../../db/models/review');
+const { Op, Sequelize } = require('sequelize');
 
 const router = express.Router();
 
+//valid check
+const validateQuery = ( page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice) => {
+  if(page > 10 || page < 1) {
+    res.status(400);
+    return res.json({
+      'message': "Bad Request",
+      'errors': {
+        'page': "Page must be greater than or equal to 1 or less than or equal to 10",
+      }
+    })
+  }
+  if(size > 20 || size < 1) {
+    res.status(400);
+    return res.json({
+      'message': "Bad Request",
+      'errors': {
+        'size': "Size must be greater than or equal to 1 or less than or equal to 20",
+      }
+    })
+  }
+  if(maxLat && (maxLat < -90 || maxLat > 90)) {
+    res.status(400);
+    return res.json({
+      'message': "Bad Request",
+      'errors': {
+        'maxLat': "Maximum latitude must be between -90 and 90"
+      },
+    })
+  }
+  if(minLat && (minLat < -90 || minLat > 90)) {
+    res.status(400);
+    return res.json({
+      'message': "Bad Request",
+      'errors': {
+        'minLat': "Minimum latitude must be between -90 and 90"
+      },
+    })
+  }
+  if(maxLng && (maxLng < -180 || maxLng > 180)) {
+    res.status(400);
+    return res.json({
+      'message': "Bad Request",
+      'errors': {
+        'maxLng': "Maximum longitude must be between -180 and 180"
+      },
+    })
+  }
+  if(minLng && (minLng < -180 || minLng > 180)) {
+    res.status(400);
+    return res.json({
+      'message': "Bad Request",
+      'errors': {
+        'minLng': "Minimum longitude must be between -180 and 180"
+      },
+    })
+  }
+  if(maxPrice && maxPrice < 0) {
+    res.status(400);
+    return res.json({
+      'message': "Bad Request",
+      'errors': {
+        'maxPrice': "Maximum price must be greater than or equal to 0"
+      },
+    })
+  }
+  if(minPrice && minPrice < 0) {
+    res.status(400);
+    return res.json({
+      'message': "Bad Request",
+      'errors': {
+        'minPrice': "Minimum price must be greater than or equal to 0"
+      },
+    })
+  }
+  return;
+}
+
 //create a new spot
-router.post('', async (req, res) => {
+router.post('/', requireAuth, async (req, res) => {
   const { address, city, state, country, lat, lng, name, description, price} = req.body;
 
-  const { user } = req;
-
-  let ownerId = user.id;
+  let ownerId = req.user.id;
 
   const spot = await Spot.create({address, ownerId, city, state, country, lat, lng, name, description, price});
 
-  const safeSpot = {
-    id: spot.id,
-    ownerId: spot.ownerId,
-    address: spot.address,
-    city: spot.city,
-    state: spot.state,
-    country: spot.country,
-    lat: spot.lat,
-    lng: spot.lng,
-    name: spot.name,
-    description: spot.description,
-    price: spot.price,
-    createdAt: spot.createdAt,
-    updatedAt: spot.updatedAt
-  };
-
-  await setTokenCookie(res, safeSpot);
-
+  res.status(201);
   return res.json({
-    spot: safeSpot
+    spot
   });
 })
 
-//get all spots
+//get all spots + query
 router.get('/', async (req, res) => {
-  let Spots = await Spot.findAll();
-  return res.json({Spots})
+
+  let {page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice} = req.query;
+
+  if(!page) {
+    page = 1;
+  }
+  if(!size) {
+    size = 20;
+  }
+
+  page = parseInt(page);
+  size = parseInt(size);
+
+  validateQuery(page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice);
+
+  const where = {};
+  if(minLat) {
+    where.lat = {
+      [Op.gte]: minLat
+    }
+  }
+  if(maxLat) {
+    where.lat = {
+      ...where.lat, [Op.lte]: maxLat
+    }
+  }
+  if(minLng) {
+    where.lng = {
+      [Op.gte]: minLng
+    }
+  }
+  if(maxLng) {
+    where.lng = {
+      ...where.lng, [Op.lte]: maxLng
+    }
+  }
+  if(minPrice) {
+    where.price = {
+      [Op.gte]: minPrice
+    }
+  }
+  if(maxPrice) {
+    where.price = {
+      ...where.price, [Op.lte]: maxPrice
+    }
+  }
+
+  let spots = await Spot.findAll({
+    include: [
+      {
+        model: Review,
+      },
+      {
+        model: SpotImage,
+        attributes: ['url'],
+        where: { preview: true },
+        required: false,
+      }
+    ],
+    limit: size,
+    offset: (page - 1) * size,
+    where,
+  });
+
+  const print = spots.map((spot) => {
+    const reviews = spot.Reviews;
+    const totalStars = reviews.reduce((acc, review) => acc + review.stars, 0);
+    const avgRating = totalStars / reviews.length;
+    return {
+      id: spot.id,
+      ownerId: spot.ownerId,
+      address: spot.address,
+      city: spot.city,
+      state: spot.state,
+      country: spot.country,
+      lat: spot.lat,
+      lng: spot.lng,
+      name: spot.name,
+      description: spot.description,
+      price: spot.price,
+      createdAt: spot.createdAt,
+      updatedAt: spot.updatedAt,
+      avgRating: avgRating,
+      previewImage: spot.previewImage
+    }
+  })
+
+  return res.json({ Spots: print})
 })
 
 //get all spots by Id
-router.get('/current', async (req, res) => {
+router.get('/current', requireAuth, async (req, res) => {
   const { user } = req;
-  let Spots = await Spot.findAll({where: {ownerId: user.id}})
-  return res.json({Spots})
+  let spots = await Spot.findAll({
+    where: {
+      ownerId: user.id
+    },
+    include : [
+      {
+        model: SpotImage
+      },
+      {
+        model: Review
+      }
+    ],
+  })
+
+  const print = spots.map((spot) => {
+    const reviews = spot.Reviews;
+    const totalStars = reviews.reduce((acc, review) => acc + review.stars, 0);
+    const avgRating = totalStars / reviews.length;
+    return {
+      id: spot.id,
+      ownerId: spot.ownerId,
+      address: spot.address,
+      city: spot.city,
+      state: spot.state,
+      country: spot.country,
+      lat: spot.lat,
+      lng: spot.lng,
+      name: spot.name,
+      description: spot.description,
+      price: spot.price,
+      createdAt: spot.createdAt,
+      updatedAt: spot.updatedAt,
+      avgRating: avgRating,
+      previewImage: spot.previewImage
+    }
+  })
+
+  return res.json({ Spots: print})
 })
 
 //get details of a spot from an id
 router.get('/:spotId', async (req, res) => {
-  let Spots = await Spot.findByPk(parseInt(req.params.spotId));
-  return res.json({Spots});
+  const { spotId } = req.params;
+  let spots = await Spot.findByPk(spotId);
+
+  if(!spots) {
+    res.status(404);
+    return res.json({"message": "Spot couldn't be found"})
+  }
+
+  const spotDetail = await Spot.findOne({
+    where: {
+      id: spotId,
+    },
+    include: [
+      {
+        model: SpotImage,
+        as: "SpotImages",
+        attributes: ["id", "url", "preview"]
+      },
+      {
+        model: User,
+        as: "Owner",
+        attributes: ["id", "firstName", "lastName"]
+      }
+    ]
+  });
+
+  const reviewDetail = await Review.findOne({
+    where: {
+      spotId
+    },
+    attributes: [
+      [Sequelize.fn("COUNT", Sequelize.col("id")), "numReviews"],
+      [Sequelize.fn("AVG", Sequelize.col("stars")), "avgStarRating"],
+    ],
+    raw: true
+  })
+
+  const { SpotImages, Owner, lat, lng, price, ...rest} = spotDetail.toJSON();
+
+  const print = {
+    ...rest,
+    lat: Number(lat),
+    lng: Number(lng),
+    price: Number(price),
+    numReviews: Number(reviewData.numReviews),
+    avgStarRating: Number(reviewData.avgStarRating),
+    SpotImages,
+    Owner,
+  }
+
+  return res.json(print);
 })
 
 //edit a spot
-router.put('/:spotId', async (req, res) => {
-  const { user } = req;
+router.put('/:spotId', requireAuth, async (req, res) => {
   const spot = await Spot.findByPk(parseInt(req.params.spotId));
 
   const { address, city, state, country, lat, lng, name, description, price} = req.body;
@@ -143,8 +369,17 @@ router.get('/:spotId/reviews', async (req, res) => {
 })
 
 //Add an Image to a Spot based on the Spot's id
-router.post('/:spotId/images', async (req, res) => {
+router.post('/:spotId/images', requireAuth, async (req, res) => {
   const spot = await Spot.findByPk(req.params.spotId);
+
+  if(!spot) {
+    res.status(404);
+    return res.json({"message": "Spot couldn't be found"})
+  }
+  if(req.user.id !== spot.ownerId) {
+    res.status(403);
+    return res.json({"message": "Not authorized!"})
+  }
 
   const { url, preview } = req.body;
 
@@ -152,19 +387,13 @@ router.post('/:spotId/images', async (req, res) => {
 
   const spotImage = await SpotImage.create({ url, preview, spotId});
 
-  const safeImage = {
+  const print = {
     id: spotImage.id,
-    preview: spotImage.preview,
-    spotId: spotImage.spotId,
-    createdAt: spotImage.createdAt,
-    updatedAt: spotImage.updatedAt
+    url: spotImage.url,
+    preview: spotImage.preview
   }
 
-  await setTokenCookie(res, safeImage);
-
-  return res.json({
-    spotImage : safeImage
-  });
+  return res.json({print});
 })
 
 
@@ -213,7 +442,6 @@ router.get('/current', async (req, res) => {
   return res.json({Spots})
 })
 
-//Add Query Filters to Get All Spots
 
 
 module.exports = router;

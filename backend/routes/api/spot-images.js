@@ -1,12 +1,8 @@
 const express = require('express');
 
-const { setTokenCookie, requireAuth } = require('../../utils/auth');
+const { requireAuth } = require('../../utils/auth');
 
-const { check } = require('express-validator');
-const { handleValidationErrors } = require('../../utils/validation');
-
-const { Spot, Review, SpotImage } = require('../../db/models');
-const review = require('../../db/models/review');
+const { User, Spot, SpotImage, Review, ReviewImage, Booking } = require('../../db/models');
 
 const router = express.Router();
 
@@ -16,15 +12,21 @@ router.delete('/:imageId', requireAuth, async (req, res) => {
 
   if(!spotImage) {
     res.status(404);
-    return res.json({"message": "Spot Image couldn't be found"})
+    return res.json({"message": "Spot Image couldn't be found"});
   }
 
-  if(req.spot.ownerId === req.user.id){
-    await spotImage.destroy();
+  const spot = await Spot.findByPk(spotImage.spotId);
 
-    res.status(200);
-    return res.json({"message": "Successfully deleted"});
+  if(req.user.id !== spot.ownerId) {
+    res.status(403);
+    return res.json({"message": "Not Spot Owner"});
   }
+
+  await spotImage.destroy();
+
+  res.status(200);
+  return res.json({"message": "Successfully deleted"});
+
 })
 
 module.exports = router;

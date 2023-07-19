@@ -6,11 +6,15 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       User.hasMany(
         models.Spot,
-        {foreignKey: 'ownerId', onDelete: 'CASCADE', hooks: true}
+        {foreignKey: 'ownerId'}
       ),
       User.hasMany(
         models.Review,
-        {foreignKey: 'userId', onDelete: 'CASCADE', hooks: true}
+        {foreignKey: 'userId'}
+      ),
+      User.hasMany(
+        models.Booking,
+        {foreignKey: "userId"}
       )
     }
   };
@@ -26,16 +30,35 @@ module.exports = (sequelize, DataTypes) => {
             if (Validator.isEmail(value)) {
               throw new Error("Cannot be an email.");
             }
+          },
+          emptyValidate(value) {
+            if(value.length === 0) {
+              throw new Error("Cannot be empty")
+            }
           }
         }
       },
       firstName: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          emptyValidate(value) {
+            if(value.length === 0) {
+              throw new Error("Cannot be empty")
+            }
+          }
+        }
       },
       lastName: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          emptyValidate(value) {
+            if(value.length === 0) {
+              throw new Error("Cannot be empty")
+            }
+          }
+        }
       },
       email: {
         type: DataTypes.STRING,

@@ -1,23 +1,29 @@
 const express = require('express');
+const { Sequelize } = require("sequelize");
 
-const { setTokenCookie, requireAuth } = require('../../utils/auth');
+const { requireAuth } = require('../../utils/auth');
 
-const { check } = require('express-validator');
-const { handleValidationErrors } = require('../../utils/validation');
-
-const { Spot, User, Review, ReviewImage, SpotImage } = require('../../db/models');
-const spotimage = require('../../db/models/spotimage');
+const { User, Spot, SpotImage, Review, ReviewImage, Booking } = require('../../db/models');
 
 const router = express.Router();
 
 //Get all Reviews of the Current User
 router.get('/current', requireAuth, async (req, res) => {
-
-  let reviews = await Review.findAll({
+  const reviews = await Review.findAll({
     include: [
       {
         model: User,
         attributes: ['id', 'firstName', 'lastName']
+      },
+      {
+        model: Spot,
+        attributes: ['id', 'ownerId', 'address', 'city', 'state', 'country', 'lat', 'lng', 'name', 'price'],
+        include: [
+          {
+            model: SpotImage,
+            attributes: ['url'], limit: 1
+          }
+        ]
       },
       {
         model: ReviewImage,
@@ -27,36 +33,43 @@ router.get('/current', requireAuth, async (req, res) => {
     where: {userId: req.user.id}
   });
 
-  let print = [];
-  for(let i = 0; i < reviews.length; i++) {
-    let temp = {};
-    temp.id = reviews[i].id;
-    temp.userId = reviews[i].userId;
-    temp.spotId = reviews[i].spotId;
-    temp.review = reviews[i].review;
-    temp.stars = reviews[i].stars;
-    temp.createdAt = reviews[i].createdAt;
-    temp.updatedAt = reviews[i].updatedAt;
-    temp.User = reviews[i].User;
-    temp.ReviewImages = reviews[i].ReviewImages;
+  const print = reviews.map((review) => {
+    const temp = review.toJSON();
 
-    print.push(temp);
-  }
+    if(temp.Spot.SpotImages.length > 0) {
+      temp.Spot.previewImage = temp.Spot.SpotImages[0].url;
+    }
 
-  return res.json({Reviews : print});
+    temp.Spot.lat = Number(temp.Spot.lat);
+    temp.Spot.lng = Number(temp.Spot.lng);
+    temp.Spot.price = Number(temp.Spot.price);
+
+    delete temp.Spot.SpotImages;
+
+    return temp;
+  })
+
+  return res.json({Reviews: print})
 })
 
 //Edit a Review
 router.put('/:reviewId', requireAuth, async (req, res) => {
-  const prevReview = await Review.findByPk(parseInt(req.params.reviewId));
+  const { reviewId } = req.params.reviewId;
+  const currReview = await Review.findByPk(reviewId);
 
-  const {stars, review} = req.body;
-
-  if(!prevReview) {
+  if(!currReview) {
     res.status(404);
     return res.json({'message': "Review couldn't be found"})
   }
-  if(!review || stars < 1 || stars > 5){
+
+  if(req.user.id !== currReview.userId) {
+    res.status(403);
+    return res.json({"message": "Not Review Owner"})
+  }
+
+  const { stars, review } = req.body;
+
+  if(stars < 1 || stars > 5 || review.length === 0){
     res.status(400);
     return res.json({
       "message": "Bad Request",
@@ -67,42 +80,46 @@ router.put('/:reviewId', requireAuth, async (req, res) => {
     })
   }
 
-  prevReview.stars = stars;
-  prevReview.review = review;
-
-  prevReview.save();
+  await currReview.update({ review, stars })
 
   res.status(200);
-  return res.json(prevReview);
+  return res.json(currReview);
 })
 
 //delete a review
 router.delete('/:reviewId', requireAuth, async (req, res) => {
-  const review = await Review.findByPk(req.params.reviewId);
+  const { reviewId } = req.params.reviewId;
+  const review = await Review.findByPk(reviewId);
+
   if(!review) {
     res.status(404);
-    return res.json({"message": "Review couldn't be found"})
+    return res.json({"message": "Review couldn't be found"});
+  }
+
+  if(req.user.id !== review.userId){
+    res.status(403);
+    return res.json({"message": "Not Review Owner"})
   }
 
   await review.destroy();
+
   res.status(200);
-  return res.json({"message": "Successfully deleted"});
+  return res.json({"message": "Successfully deleted"})
 })
 
 //Add an Image to a Review based on the Review's id
 router.post('/:reviewId/images', requireAuth, async (req, res) => {
   const currReview = await Review.findByPk(req.params.reviewId);
 
-  //not found
   if(!currReview) {
     res.status(404);
     return res.json({"message": "Review couldn't be found"})
   }
 
   //not the user
-  if(currReview.userId != req.user.id) {
+  if(req.user.id !== currReview.userId) {
     res.status(403);
-    return res.json({"message": "not the owner"})
+    return res.json({"message": "Not Review Owner"})
   };
 
   //maximum count
@@ -119,15 +136,17 @@ router.post('/:reviewId/images', requireAuth, async (req, res) => {
 
   const { url } = req.body;
 
-  let reviewId = parseInt(req.params.reviewId);
+  const { reviewId } = req.params.reviewId;
 
   const reviewImage = await ReviewImage.create({ url, reviewId });
 
   //output
-  delete reviewImage.dataValues.createdAt;
-  delete reviewImage.dataValues.updatedAt;
-  delete reviewImage.dataValues.reviewId;
-  return res.json(reviewImage);
+  const print = {
+    id: reviewImage.id,
+    url: reviewImage.url
+  }
+
+  return res.json(print);
 })
 
 module.exports = router;

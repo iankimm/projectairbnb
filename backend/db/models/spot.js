@@ -12,16 +12,15 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Spot.hasMany(
         models.Review,
-        {foreignKey: 'spotId'}
-        //, onDelete: 'CASCADE', hooks: true
+        {foreignKey: 'spotId', onDelete: 'CASCADE'}
       ),
       Spot.hasMany(
         models.SpotImage,
-        {foreignKey: 'spotId'}
+        {foreignKey: 'spotId', onDelete: 'CASCADE'}
       ),
       Spot.belongsTo(
         models.User,
-        {foreignKey: 'ownerId'}
+        {foreignKey: 'ownerId', onDelete: 'CASCADE'}
       )
     }
   }
@@ -32,31 +31,78 @@ module.exports = (sequelize, DataTypes) => {
     },
     address: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        uniqueValidate: async function (value) {
+          const spot = await Spot.findOne({
+            where: {
+              address: value
+            }
+          })
+          if(spot) {
+            throw new Error("Address must be unique")
+          }
+        },
+        emptyValidate(value) {
+          if(value.length === 0) {
+            throw new Error("Cannot be empty")
+          }
+        }
+      }
     },
     city: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        emptyValidate(value) {
+          if(value.length === 0) {
+            throw new Error("Cannot be empty")
+          }
+        }
+      }
     },
     state: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        emptyValidate(value) {
+          if(value.length === 0) {
+            throw new Error("Cannot be empty")
+          }
+        }
+      }
     },
     country: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        emptyValidate(value) {
+          if(value.length === 0) {
+            throw new Error("Cannot be empty")
+          }
+        }
+      }
     },
     lat: {
       type: DataTypes.DECIMAL,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        min: -90,
+        max: 90,
+      }
     },
     lng: {
       type: DataTypes.DECIMAL,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        min: -180,
+        max: 180,
+      }
     },
     name: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      len: [0, 50],
     },
     description: {
       type: DataTypes.STRING,
@@ -64,7 +110,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     price: {
       type: DataTypes.DECIMAL,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        min: 0
+      }
     }
   }, {
     sequelize,
