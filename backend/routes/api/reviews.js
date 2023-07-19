@@ -36,7 +36,8 @@ router.get('/current', requireAuth, async (req, res) => {
   const print = reviews.map((review) => {
     const temp = review.toJSON();
 
-    if(temp.Spot.SpotImages) {
+
+    if(temp.Spot.SpotImages.length > 0) {
       temp.Spot.reviewImage = temp.Spot.SpotImages[0].url
     }
     else {
