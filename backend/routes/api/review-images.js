@@ -17,7 +17,7 @@ router.delete('/:imageId', requireAuth, async (req, res) => {
 
   const review = await Review.findByPk(reviewImage.reviewId);
 
-  if(req.user.id !== review.userId) {
+  if(parseInt(req.user.id) !== review.userId) {
     res.status(403);
     return res.json({"message": "Not Review Owner"});
   }
