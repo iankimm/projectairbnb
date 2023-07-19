@@ -8,30 +8,30 @@ if (process.env.NODE_ENV === 'production') {
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    options.tableName = 'Users';
-    return queryInterface.bulkInsert(options, [
-      // {
-      //   email: 'demo@user.ios',
-      //   username: 'Demo-litions',
-      //   firstName: 'Ianas',
-      //   lastName: 'Kimas',
-      //   hashedPassword: bcrypt.hashSync('password')
-      // },
-      // {
-      //   email: 'user1@user.ios',
-      //   username: 'FakeUser1s',
-      //   firstName: 'Ianass',
-      //   lastName: 'Kimass',
-      //   hashedPassword: bcrypt.hashSync('password2')
-      // },
-      // {
-      //   email: 'user2@user.ios',
-      //   username: 'FakeUser2s',
-      //   firstName: 'Ianers',
-      //   lastName: 'Kimers',
-      //   hashedPassword: bcrypt.hashSync('password3')
-      // }
-    ], {});
+    // options.tableName = 'Users';
+    // return queryInterface.bulkInsert(options, [
+    //   {
+    //     email: 'demo@user.ios',
+    //     username: 'Demo-litions',
+    //     firstName: 'Ianas',
+    //     lastName: 'Kimas',
+    //     hashedPassword: bcrypt.hashSync('password')
+    //   },
+    //   {
+    //     email: 'user1@user.ios',
+    //     username: 'FakeUser1s',
+    //     firstName: 'Ianass',
+    //     lastName: 'Kimass',
+    //     hashedPassword: bcrypt.hashSync('password2')
+    //   },
+    //   {
+    //     email: 'user2@user.ios',
+    //     username: 'FakeUser2s',
+    //     firstName: 'Ianers',
+    //     lastName: 'Kimers',
+    //     hashedPassword: bcrypt.hashSync('password3')
+    //   }
+    // ], {});
   },
 
   down: async (queryInterface, Sequelize) => {
