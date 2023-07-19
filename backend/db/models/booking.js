@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       Booking.belongsTo(
         models.User,
         {foreignKey: 'userId'}
-      ),
+      )
       Booking.belongsTo(
         models.Spot,
         {foreignKey: 'spotId'}
@@ -34,14 +34,13 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       validate: {
         isDate: true,
-        isInt: false,
         startDateValidate(value) {
-          if(new Date(value) <= new Date()){
-            throw new Error("Start date must be after today!")
+          if(new Date(value) < new Date()){
+            throw new Error("Invalid Start Date")
           }
         },
         startEmptyValidate(value) {
-          if(value.length === 0){
+          if(value === ''){
             throw new Error("Cannot be empty");
           }
         }
@@ -52,14 +51,13 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       validate: {
         isDate: true,
-        isInt: false,
         endDateValidate(value) {
-          if(value <= this.startDate) {
-            throw new Error("End date must be after start date!");
+          if(value < this.startDate) {
+            throw new Error("Invalid End Date");
           }
         },
         endEmptyValidate(value) {
-          if(value.length === 0) {
+          if(value === '') {
             throw new Error("Cannot be empty")
           }
         }

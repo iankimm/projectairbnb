@@ -13,14 +13,14 @@ module.exports = (sequelize, DataTypes) => {
       Spot.hasMany(
         models.Review,
         {foreignKey: 'spotId', onDelete: 'CASCADE'}
-      ),
+      )
       Spot.hasMany(
         models.SpotImage,
         {foreignKey: 'spotId', onDelete: 'CASCADE'}
-      ),
+      )
       Spot.belongsTo(
         models.User,
-        {foreignKey: 'ownerId', onDelete: 'CASCADE'}
+        {foreignKey: 'ownerId', as: 'Owner', onDelete: 'CASCADE'}
       )
     }
   }
@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        uniqueValidate: async function (value) {
+        async uniqueValidate(value) {
           const spot = await Spot.findOne({
             where: {
               address: value
@@ -44,7 +44,7 @@ module.exports = (sequelize, DataTypes) => {
           }
         },
         emptyValidate(value) {
-          if(value.length === 0) {
+          if(value === '') {
             throw new Error("Cannot be empty")
           }
         }
@@ -55,7 +55,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         emptyValidate(value) {
-          if(value.length === 0) {
+          if(value === '') {
             throw new Error("Cannot be empty")
           }
         }
@@ -66,7 +66,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         emptyValidate(value) {
-          if(value.length === 0) {
+          if(value === '') {
             throw new Error("Cannot be empty")
           }
         }
@@ -77,7 +77,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         emptyValidate(value) {
-          if(value.length === 0) {
+          if(value === '') {
             throw new Error("Cannot be empty")
           }
         }

@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       Review.belongsTo(
         models.User,
         {foreignKey: 'userId'}
-      ),
+      )
       Review.belongsTo(
         models.Spot,
         {foreignKey: 'spotId'}
@@ -41,9 +41,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len: [0,500],
         emptyValidate(value) {
-          if(value.length === 0) {
+          if(value === '') {
             throw new Error("Cannot be empty")
           }
         },
@@ -56,7 +55,7 @@ module.exports = (sequelize, DataTypes) => {
         min: 1,
         max: 5,
         emptyValidate(value) {
-          if(value.length === 0) {
+          if(value === '') {
             throw new Error("Cannot be empty")
           }
         }

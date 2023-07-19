@@ -6,10 +6,9 @@ const { User, Spot, SpotImage, Review, ReviewImage, Booking } = require('../../d
 
 const router = express.Router();
 
-//delete a spot
+//delete a ReviewImage
 router.delete('/:imageId', requireAuth, async (req, res) => {
   const reviewImage = await ReviewImage.findByPk(req.params.imageId);
-
 
   if(!reviewImage) {
     res.status(404);

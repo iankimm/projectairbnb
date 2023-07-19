@@ -7,11 +7,11 @@ module.exports = (sequelize, DataTypes) => {
       User.hasMany(
         models.Spot,
         {foreignKey: 'ownerId'}
-      ),
+      )
       User.hasMany(
         models.Review,
         {foreignKey: 'userId'}
-      ),
+      )
       User.hasMany(
         models.Booking,
         {foreignKey: "userId"}
@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
             }
           },
           emptyValidate(value) {
-            if(value.length === 0) {
+            if(value === '') {
               throw new Error("Cannot be empty")
             }
           }
@@ -43,7 +43,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           emptyValidate(value) {
-            if(value.length === 0) {
+            if(value === '') {
               throw new Error("Cannot be empty")
             }
           }
@@ -54,7 +54,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           emptyValidate(value) {
-            if(value.length === 0) {
+            if(value === '') {
               throw new Error("Cannot be empty")
             }
           }

@@ -9,34 +9,46 @@ const router = express.Router();
 
 //Get all of the Current User's Bookings
 router.get('/current', requireAuth, async (req, res) => {
-  let bookings = await Booking.findAll({
+  const bookings = await Booking.findAll({
     include: [
       {
         model: Spot,
         attributes: {
-          exclude: ['createdAt', 'updatedAt']
+          exclude: ['createdAt', 'updatedAt', 'description']
         },
         include: {
           model: SpotImage,
           attributes: ['url'],
           limit: 1
         },
-      },
+      }
     ],
     where: { userId: req.user.id }
   })
 
   const print = bookings.map((booking) => {
     const temp = booking.toJSON();
-    if(temp.Spot.SpotImages.length > 0) {
-      temp.Spot.previewImage = temp.Spot.SpotImages[0].url;
-    }
-    temp.Spot.lat = Number(temp.Spot.lat);
-    temp.Spot.lng = Number(temp.Spot.lng);
-    temp.Spot.price = Number(temp.Spot.price);
+    const final = {}
 
-    delete temp.Spot.SpotImages;
-    return temp;
+    if(temp.Spot.SpotImages) {
+      temp.Spot.reviewImage = temp.Spot.SpotImages[0].url
+    }
+    else {
+      temp.Spot.reviewImage = ''
+    }
+
+    //placing in order
+    final.id = temp.id;
+    final.spotId = temp.spotId;
+    final.Spot = temp.Spot;
+    final.userId = temp.userId;
+    final.startDate = temp.startDate;
+    final.endDate = temp.endDate;
+    final.createdAt = temp.createdAt;
+    final.updatedAt = temp.updatedAt;
+
+    delete final.Spot.SpotImages;
+    return final;
   });
 
   return res.json({Bookings: print});
@@ -63,17 +75,19 @@ router.put('/:bookingId', requireAuth, async (req, res) => {
     return res.json({'message': "Past bookings can't be modified"})
   }
 
+  const bookingId = parseInt(req.params.bookingId);
+
   const conflict = await Booking.findOne({
     where: {
-      spotId: booking.spotId
+      spotId: booking.spotId,
+      id: {
+        [Op.ne]: bookingId
+      },
+      [Op.or]: [
+        { startDate: { [Op.between]: [startDate, endDate] } },
+        { endDate: { [Op.between]: [startDate, endDate] } },
+      ]
     },
-    id: {
-      [Op.ne]: bookingId
-    },
-    [Op.or]: [
-      { startDate: { [Op.between]: [startDate, endDate] } },
-      { endDate: { [Op.between]: [startDate, endDate] } },
-    ]
   })
 
   if(conflict) {
@@ -89,49 +103,42 @@ router.put('/:bookingId', requireAuth, async (req, res) => {
 
   await booking.update({ startDate, endDate });
 
-  const print = {
-    id: booking.id,
-    spotId: booking.spotId,
-    userId: booking.userId,
-    startDate: booking.startDate,
-    endDate: booking.endDate,
-    createdAt: booking.createdAt,
-    updatedAt: booking.updatedAt,
-  };
-
-  return res.json(print);
+  return res.json(booking);
 })
 
 //delete a booking
 router.delete('/:bookingId', requireAuth, async (req, res) => {
-  const booking = await Review.findByPk(
-    req.params.bookingId,
-    include:
+  const bookingId = parseInt(req.params.bookingId);
+  const booking = await Booking.findByPk(
+    bookingId,
+    {
+      include:
       {
         model: Spot,
         attributes: ["ownerId"]
       }
+    }
   );
 
   if(!booking) {
     res.status(404);
-    return res.json({"message": "Booking couldn't be found"})
+    return res.json({"message": "Booking couldn't be found"});
   }
 
-  if(req.user.id !== booking.userId) {
-    res.status(403);
-    return res.json({"message": "Not Booking Owner"});
-  }
-
-  if(new Date(booking.startDate) < new Date()){
+  if(new Date(booking.startDate) < new Date()) {
     res.status(403);
     return res.json({"message": "Bookings that have been started can't be deleted"})
   }
 
-  await booking.destroy();
+  if(req.user.id === booking.userId || req.user.id === booking.Spot.ownerId) {
+    await booking.destroy();
 
-  res.status(200);
-  return res.json({"message": "Successfully deleted"});
+    res.status(200);
+    return res.json({"message": "Successfully deleted"});
+  }
+
+  res.status(403);
+  return res.json({"message": "Not Booking owner or Not Spot Owner"});
 })
 
 module.exports = router;

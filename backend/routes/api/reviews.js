@@ -1,5 +1,4 @@
 const express = require('express');
-const { Sequelize } = require("sequelize");
 
 const { requireAuth } = require('../../utils/auth');
 
@@ -17,13 +16,14 @@ router.get('/current', requireAuth, async (req, res) => {
       },
       {
         model: Spot,
-        attributes: ['id', 'ownerId', 'address', 'city', 'state', 'country', 'lat', 'lng', 'name', 'price'],
-        include: [
-          {
-            model: SpotImage,
-            attributes: ['url'], limit: 1
-          }
-        ]
+        attributes: {
+          exclude: ['createdAt', 'updatedAt', 'description']
+        },
+        include: {
+          model: SpotImage,
+          attributes: ['url'],
+          limit: 1
+        },
       },
       {
         model: ReviewImage,
@@ -36,13 +36,12 @@ router.get('/current', requireAuth, async (req, res) => {
   const print = reviews.map((review) => {
     const temp = review.toJSON();
 
-    if(temp.Spot.SpotImages.length > 0) {
-      temp.Spot.previewImage = temp.Spot.SpotImages[0].url;
+    if(temp.Spot.SpotImages) {
+      temp.Spot.reviewImage = temp.Spot.SpotImages[0].url
     }
-
-    temp.Spot.lat = Number(temp.Spot.lat);
-    temp.Spot.lng = Number(temp.Spot.lng);
-    temp.Spot.price = Number(temp.Spot.price);
+    else {
+      temp.Spot.reviewImage = ''
+    }
 
     delete temp.Spot.SpotImages;
 
@@ -54,8 +53,7 @@ router.get('/current', requireAuth, async (req, res) => {
 
 //Edit a Review
 router.put('/:reviewId', requireAuth, async (req, res) => {
-  const { reviewId } = req.params.reviewId;
-  const currReview = await Review.findByPk(reviewId);
+  const currReview = await Review.findByPk(req.params.reviewId);
 
   if(!currReview) {
     res.status(404);
@@ -69,7 +67,7 @@ router.put('/:reviewId', requireAuth, async (req, res) => {
 
   const { stars, review } = req.body;
 
-  if(stars < 1 || stars > 5 || review.length === 0){
+  if(stars < 1 || stars > 5 || review === ''){
     res.status(400);
     return res.json({
       "message": "Bad Request",
@@ -88,8 +86,7 @@ router.put('/:reviewId', requireAuth, async (req, res) => {
 
 //delete a review
 router.delete('/:reviewId', requireAuth, async (req, res) => {
-  const { reviewId } = req.params.reviewId;
-  const review = await Review.findByPk(reviewId);
+  const review = await Review.findByPk(req.params.reviewId);
 
   if(!review) {
     res.status(404);
@@ -136,9 +133,7 @@ router.post('/:reviewId/images', requireAuth, async (req, res) => {
 
   const { url } = req.body;
 
-  const { reviewId } = req.params.reviewId;
-
-  const reviewImage = await ReviewImage.create({ url, reviewId });
+  const reviewImage = await ReviewImage.create({ url, reviewId: req.params.reviewId });
 
   //output
   const print = {
