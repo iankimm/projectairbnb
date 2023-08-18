@@ -31,10 +31,10 @@ router.get('/current', requireAuth, async (req, res) => {
     const final = {}
 
     if(temp.Spot.SpotImages.length > 0) {
-      temp.Spot.reviewImage = temp.Spot.SpotImages[0].url
+      temp.Spot.previewImage = temp.Spot.SpotImages[0].url
     }
     else {
-      temp.Spot.reviewImage = ''
+      temp.Spot.previewImage = ''
     }
 
     //placing in order
