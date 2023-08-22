@@ -30,3 +30,5 @@ const spotReducer = (state = {}, action) => {
       return state;
   }
 }
+
+export default spotReducer;
