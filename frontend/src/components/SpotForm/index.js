@@ -22,7 +22,10 @@ const SpotForm = ({ spot, formType}) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
+
+    //needs to be added to state
     spot = {...spot, address, city, state, country, lat, lng, name, description, price};
+    console.log(spot);
   }
 
   return (
@@ -100,6 +103,9 @@ const SpotForm = ({ spot, formType}) => {
           onChange={(e)=> setPrice(e.target.value)}
         />
       </label>
+      <button type="submit">{formType}</button>
     </form>
   )
 }
+
+export default SpotForm;
