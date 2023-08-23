@@ -13,7 +13,11 @@ const SpotIndexItem = ({spot}) => {
 
   return (
     <li>
-      <div className='li-contents-flex'>
+      <Link to={`/spots/${spot.id}`}>
+        <div className="tooltip">
+          {spot.name}
+        </div>
+        <div className='li-contents-flex'>
         <div>
           {spot.city}, {spot.state}
         </div>
@@ -21,6 +25,7 @@ const SpotIndexItem = ({spot}) => {
           ${spot.price} night
         </div>
       </div>
+      </Link>
     </li>
   )
 }
