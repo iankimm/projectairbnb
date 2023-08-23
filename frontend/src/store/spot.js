@@ -8,7 +8,7 @@ const REMOVE_SPOT = "spot/REMOVE_SPOT";
 
 const loadSpot = (spots) => ({
   type: LOAD_SPOT,
-  payload: spots,
+  spots,
 });
 
 const receiveSpot = (spot) => ({
@@ -30,6 +30,8 @@ const removeSpot = (spotId) => ({
 export const fetchSpots = (payload) => async (dispatch) => {
   const response = await fetch('/api/spots');
   const spots = await response.json();
+  console.log("SPOTS",spots);
+  console.log("typeof", typeof spots)
   dispatch(loadSpot(spots));
 }
 

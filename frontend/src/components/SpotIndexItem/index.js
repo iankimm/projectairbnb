@@ -14,7 +14,12 @@ const SpotIndexItem = ({spot}) => {
   return (
     <li>
       <div className='li-contents-flex'>
-        <Link to={`/spots/${spot.id}`}> spot # {spot.id} </Link>
+        <div>
+          {spot.city}, {spot.state}
+        </div>
+        <div>
+          ${spot.price} night
+        </div>
       </div>
     </li>
   )

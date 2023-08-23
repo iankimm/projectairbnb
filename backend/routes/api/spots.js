@@ -192,7 +192,8 @@ router.get('/', async (req, res) => {
     return print;
   })
 
-  return res.json({ Spots: print})
+  //return res.json({ Spots: print})
+  res.json(print)
 })
 
 //get all spots by Id

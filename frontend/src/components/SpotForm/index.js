@@ -1,10 +1,13 @@
 import './SpotForm.css'
 
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { insertSpot } from '../../store/spot';
 
 const SpotForm = ({ spot, formType}) => {
   const history = useHistory();
+  const dispatch = useDispatch();
 
   //spot information
   const [address, setAddress] = useState('');
@@ -24,7 +27,8 @@ const SpotForm = ({ spot, formType}) => {
     setErrors({});
 
     //needs to be added to state
-    spot = {...spot, address, city, state, country, lat, lng, name, description, price};
+    spot = {address, city, state, country, lat, lng, name, description, price};
+    dispatch(insertSpot(spot));
     console.log(spot);
   }
 

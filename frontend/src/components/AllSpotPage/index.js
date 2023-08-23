@@ -21,9 +21,11 @@ const SpotIndex = () => {
       <Link className="add-report" to="/spots/new">
         Add a Spot
       </Link>
-      {spots.map((spot) => (
+      {
+      spots.map((spot) => (
         <SpotIndexItem spot={spot} key={spot.id}/>
-      ))}
+      ))
+      }
     </section>
   )
 }
