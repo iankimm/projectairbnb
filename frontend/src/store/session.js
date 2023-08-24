@@ -3,7 +3,6 @@ import { csrfFetch } from "./csrf";
 
 const SET_USER = "session/setUser";
 const REMOVE_USER = "session/removeUser";
-const RECEIVE_USER = "session/receiverUser"
 
 const setUser = (user) => {
   return {

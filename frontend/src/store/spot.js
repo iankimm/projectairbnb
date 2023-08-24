@@ -36,19 +36,26 @@ export const fetchSpots = (payload) => async (dispatch) => {
 }
 
 export const insertSpot = (payload) => async (dispatch) => {
-  const response = await fetch('/api/spots', {
+  const { address, city, state, country, lat, lng, name, description, price } = payload;
+  const response = await csrfFetch("/api/spots", {
     method: "POST",
-    headers: {
-      "Content-Type" : "application/json"
-    },
-    body: JSON.stringify(payload)
+    body: JSON.stringify({
+      address,
+      city,
+      state,
+      country,
+      lat,
+      lng,
+      name,
+      description,
+      price
+    }),
   });
-  const spot = await response.json();
-  if(response.ok){
-    dispatch(receiveSpot(spot));
-  }
-  return spot;
-}
+  const data = await response.json();
+  console.log('spot data', data);
+  dispatch(receiveSpot(data));
+  return response;
+};
 
 export const editSpot = (payload) => async (dispatch) => {
   const response = await fetch(`/api/spots/${payload.id}`, {
@@ -88,7 +95,8 @@ const spotReducer = (state = {}, action) => {
       })
       return spotState;
     case RECEIVE_SPOT:
-      return { ...state, [action.spot.id]: action.spot };
+      const spot = {[spot.id]: spot};
+      return {...state, spots: [...state.spots, spot] }
     case UPDATE_SPOT:
       return { ...state, [action.spot.id]: action.spot };
     case REMOVE_SPOT:
