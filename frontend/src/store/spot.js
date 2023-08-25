@@ -53,7 +53,7 @@ export const insertSpot = (payload) => async (dispatch) => {
   });
   const data = await response.json();
   console.log('spot data', data);
-  dispatch(receiveSpot(data));
+  dispatch(fetchSpots(data));
   return response;
 };
 
