@@ -20,6 +20,10 @@ const SpotShow = () => {
   useEffect(() => {
     dispatch()
   },[dispatch])
+
+  return (
+    <></>
+  )
 }
 
 export default SpotShow;
