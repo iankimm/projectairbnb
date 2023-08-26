@@ -22,8 +22,8 @@ function App() {
       </div>
       <Navigation isLoaded={isLoaded} />
       {isLoaded && <Switch></Switch>}
-      <SpotIndex />
       <Switch>
+        <Route exact path='/' component={SpotIndex} />
         <Route path='/spots/new' component={CreateSpotForm} />
         <Route path='/spots/:spotId' component={SpotShow} />
       </Switch>

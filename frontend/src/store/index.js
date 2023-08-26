@@ -4,11 +4,13 @@ import thunk from 'redux-thunk';
 //reducers
 import sessionReducer from "./session";
 import spotReducer from './spot'
+import currentSpotOwnerReducer from './currentSpotOwner';
 
 //rootReducer
 const rootReducer = combineReducers({
   session: sessionReducer,
   spots: spotReducer,
+  currentSpotOwner: currentSpotOwnerReducer,
 });
 
 let enhancer;

@@ -52,13 +52,12 @@ export const insertSpot = (payload) => async (dispatch) => {
     }),
   });
   const data = await response.json();
-  console.log('spot data', data);
   dispatch(fetchSpots(data));
   return response;
 };
 
 export const editSpot = (payload) => async (dispatch) => {
-  const response = await fetch(`/api/spots/${payload.id}`, {
+  const response = await csrfFetch(`/api/spots/${payload}`, {
     method: "PUT",
     headers: {
       "Content-Type" : "application/json"
@@ -73,7 +72,7 @@ export const editSpot = (payload) => async (dispatch) => {
 }
 
 export const deleteSpots = (payload) => async (dispatch) => {
-  const response = await fetch(`/api/spots/${payload.id}`, {
+  const response = await csrfFetch(`/api/spots/${payload}`, {
     method: "DELETE",
     headers: {
       "Content-Type" : "application/json"
@@ -82,6 +81,14 @@ export const deleteSpots = (payload) => async (dispatch) => {
   if(response.ok) {
     dispatch(removeSpot(payload.id));
   }
+}
+
+export const fetchSpotId = (payload) => async (dispatch) => {
+  const response = await csrfFetch(`/api/spots/${payload}`);
+  const spot = await response.json();
+  //dispatch(updateSpot(spot));
+  console.log(spot)
+  return spot;
 }
 
 //reducer
@@ -95,10 +102,9 @@ const spotReducer = (state = {}, action) => {
       })
       return spotState;
     case RECEIVE_SPOT:
-      const spot = {[spot.id]: spot};
-      return {...state, spots: [...state.spots, spot] }
+      return {...state, spots: [...state.spots, action.spot]}
     case UPDATE_SPOT:
-      return { ...state, [action.spot.id]: action.spot };
+      return {...state, spots: [...state.spots, action.spot] }
     case REMOVE_SPOT:
       const newState = {...state};
       delete newState[action.spotId];
