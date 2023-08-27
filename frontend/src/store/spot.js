@@ -30,8 +30,6 @@ const removeSpot = (spotId) => ({
 export const fetchSpots = (payload) => async (dispatch) => {
   const response = await fetch('/api/spots');
   const spots = await response.json();
-  console.log("SPOTS",spots);
-  console.log("typeof", typeof spots)
   dispatch(loadSpot(spots));
 }
 
@@ -83,13 +81,7 @@ export const deleteSpots = (payload) => async (dispatch) => {
   }
 }
 
-export const fetchSpotId = (payload) => async (dispatch) => {
-  const response = await csrfFetch(`/api/spots/${payload}`);
-  const spot = await response.json();
-  //dispatch(updateSpot(spot));
-  console.log(spot)
-  return spot;
-}
+
 
 //reducer
 
