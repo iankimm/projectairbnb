@@ -26,8 +26,8 @@ const UpdateSpot = ({spot}) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <title>{formType}</title>
-      <h2>{formType}</h2>
+      <title></title>
+      <h2></h2>
       <div>
         <header>Where's your place located?</header>
         <div>

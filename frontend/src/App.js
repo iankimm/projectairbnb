@@ -7,6 +7,9 @@ import SpotIndex from "./components/AllSpotPage";
 import CreateSpotForm from "./components/CreateSpotForm.js";
 import SpotShow from "./components/SpotShow";
 import Management from "./components/Management";
+import logo from './favicon-32x32.png'
+import { Link } from "react-router-dom";
+import './App.css'
 
 function App() {
   const dispatch = useDispatch();
@@ -18,11 +21,20 @@ function App() {
   //app.js
   return (
     <>
+    <div className='container'>
       <div className="header">
-        GroundCnC
+        <Link to='/'>
+        <img src={logo} />
+        </Link>
+        <div className='title'>
+         GroundCnC
+         </div>
+      <div className='login'>
+        <Navigation isLoaded={isLoaded} />
+        {isLoaded && <Switch></Switch>}
       </div>
-      <Navigation isLoaded={isLoaded} />
-      {isLoaded && <Switch></Switch>}
+      </div>
+      </div>
       <Switch>
         <Route exact path='/' component={SpotIndex} />
         <Route path='/spots/new' component={CreateSpotForm} />
