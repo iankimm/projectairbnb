@@ -9,21 +9,32 @@ function LoginFormModal() {
   const dispatch = useDispatch();
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState('');
   const { closeModal } = useModal();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const errorMsg = 'The provided credentials were invalid'
     setErrors({});
     return dispatch(sessionActions.login({ credential, password }))
       .then(closeModal)
       .catch(async (res) => {
         const data = await res.json();
-        if (data && data.errors) {
-          setErrors(data.errors);
+        console.log(typeof data);
+        if (data && (typeof data === 'object')) {
+          setErrors(errorMsg);
         }
+        console.log('errors', errors)
       });
   };
+
+  const demoLogin = () => {
+    const demoId = 'iankimm';
+    const demoPw = 'password';
+
+    return dispatch(sessionActions.login({ credential: demoId, password: demoPw }))
+      .then(closeModal)
+  }
 
   return (
     <>
@@ -47,10 +58,14 @@ function LoginFormModal() {
             required
           />
         </label>
-        {errors.credential && (
-          <p>{errors.credential}</p>
+        {errors.length > 3 && (
+          <p>{errors}</p>
         )}
-        <button type="submit">Log In</button>
+        <button type="submit"
+        disabled={credential.length < 4 || password.length < 6}>
+          Log In
+        </button>
+        <button onClick={demoLogin}>Log in as Demo User</button>
       </form>
     </>
   );

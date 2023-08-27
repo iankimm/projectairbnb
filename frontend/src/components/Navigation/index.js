@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ProfileButton from "./ProfileButton";
@@ -16,35 +16,33 @@ function Navigation({ isLoaded }) {
     sessionLinks = (
       <li>
         <ProfileButton user={sessionUser} />
-        <Link className="add-report" to="/users/manage">
-          Manage Spots
-        </Link>
       </li>
     );
   } else {
     sessionLinks = (
-      <li>
+      <li className='loginList'>
+        <div>
         <OpenModalButton
           buttonText="Log In"
           modalComponent={<LoginFormModal />}
         />
+        </div>
+        <div>
         <OpenModalButton
           buttonText="Sign Up"
           modalComponent={<SignupFormModal />}
         />
+        </div>
       </li>
     );
   }
 
   return (
-    <ul>
-      <li>
-        <NavLink exact to="/">
-          Home
-        </NavLink>
-      </li>
-      {isLoaded && sessionLinks}
-    </ul>
+    <div className='dropdown'>
+      <ul>
+        {isLoaded && sessionLinks}
+      </ul>
+    </div>
   );
 }
 
