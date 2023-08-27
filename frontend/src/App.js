@@ -26,15 +26,15 @@ function App() {
         <Link to='/'>
         <img src={logo} />
         </Link>
-        <div className='title'>
+      </div>
+      <div className='title'>
          GroundCnC
-         </div>
+      </div>
       <div className='login'>
         <Navigation isLoaded={isLoaded} />
         {isLoaded && <Switch></Switch>}
       </div>
-      </div>
-      </div>
+    </div>
       <Switch>
         <Route exact path='/' component={SpotIndex} />
         <Route path='/spots/new' component={CreateSpotForm} />
