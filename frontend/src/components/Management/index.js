@@ -3,6 +3,7 @@ import './Management.css'
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import SpotIndexItem from '../SpotIndexItem';
+import UpdateSpot from '../UpdateSpot';
 
 const Management = () => {
   const currentUser = useSelector(state => state.session.user)
@@ -38,7 +39,7 @@ const Management = () => {
                 return (
                   <div>
                     <SpotIndexItem spot={spot} key={spot.id}/>
-                    update
+                    <UpdateSpot spot={spot}/>
                     button
                   </div>
                 )
