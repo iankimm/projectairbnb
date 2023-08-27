@@ -77,7 +77,7 @@ export const deleteSpots = (payload) => async (dispatch) => {
     }
   });
   if(response.ok) {
-    dispatch(removeSpot(payload.id));
+    dispatch(removeSpot(payload));
   }
 }
 
@@ -98,9 +98,7 @@ const spotReducer = (state = {}, action) => {
     case UPDATE_SPOT:
       return {...state, spots: [...state.spots, action.spot] }
     case REMOVE_SPOT:
-      const newState = {...state};
-      delete newState[action.spotId];
-      return newState;
+      return {...state}
     default:
       return state;
   }
