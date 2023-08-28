@@ -8,6 +8,7 @@ import OpenModalButton from "../OpenModalButton";
 import { fetchSpotIdReviews } from '../../store/review';
 import CreateReviewForm from '../CreateReview';
 import { fetchImageById } from '../../store/image';
+import Month from './month';
 
 const SpotShow = () => {
   const { spotId } = useParams();
@@ -88,7 +89,13 @@ const SpotShow = () => {
       </div>
       <hr></hr>
       <h2>
-        <i className="fas fa-star" />{currentSpot.avgStarRating > 0 ? currentSpot.avgStarRating : 0} -  {currentSpot.numReviews} Reviews
+        <i className="fas fa-star" />{currentSpot.avgStarRating > 0 ? currentSpot.avgStarRating : 0}
+        {
+          currentSpot.numReviews > 0 ?
+          `· ${currentSpot.numReviews} Reviews`
+          :
+          ""
+        }
       </h2>
       <div>
         {
@@ -96,6 +103,7 @@ const SpotShow = () => {
             return(
             <div>
               <div className="reviewname">{review.User.firstName}</div>
+              <Month review={review}/>
               {review.review}
             </div>)
           })

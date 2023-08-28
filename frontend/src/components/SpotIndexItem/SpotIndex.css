@@ -1,0 +1,21 @@
+.spotContainers {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip {
+  display: none;
+  position: absolute;
+  background-color: pink;
+  color: black;
+  padding: 5px 10px;
+  border-radius: 5px;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.spotContainers:hover .tooltip {
+  display: block;
+}
