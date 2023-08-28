@@ -12,7 +12,7 @@ const SpotIndexItem = ({spot}) => {
         <div className='li-contents-flex'>
           {
             spot.previewImage ?
-              <img src={""} alt={spot.name} />
+              <img className="SpotIndexLargeImage"src={spot.previewImage} alt={spot.name} />
               :
               <div>No Image available</div>
           }

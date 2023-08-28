@@ -39,18 +39,14 @@ const SpotShow = () => {
 
   const currentSpot = useSelector(state => state.currentSpot)
 
-  let previewImage = '';
-  let tempImages = [];
-  let smallImages = [];
-
   //need to add images
-
-
-
   useEffect(() => {
     dispatch(fetchSpotIdOwner(spotId))
     dispatch(fetchSpotIdReviews(spotId))
     dispatch(fetchImageById(spotId))
+
+
+
   },[dispatch])
 
   return (
@@ -61,16 +57,29 @@ const SpotShow = () => {
       <div className='body'>
         <h3>{currentSpot.city}, {currentSpot.state}, {currentSpot.country}</h3>
       </div>
-      <div className="imagebox">
-        <div className="preview">
-          <img src={previewImage} alt="no image available" />
-        </div>
-        <div className="smallImages">
-          {
-            smallImages.map(image => {
-              return <div><img src={image} alt="no image available"/></div>
-            })
-          }
+      <div className="allImages">
+        <div className="imagebox">
+          <div className="largeImage">
+            {
+            images &&
+              images.map(image => {
+                return (image.preview === true ? <div><img className="SpotDetailPreview" src={image.url} alt="no image available" /></div>
+                : ""
+
+                )
+              })
+            }
+          </div>
+          <div className="smallImages">
+            {
+            images &&
+              images.map(image => {
+                return(image.preview === false ? <div className="SpotDetailSmallImagesDiv"><img className="SpotDetailSmallImages" src={image.url} alt="no image available" /></div>
+                : ""
+                )
+              })
+            }
+          </div>
         </div>
       </div>
       <div>
