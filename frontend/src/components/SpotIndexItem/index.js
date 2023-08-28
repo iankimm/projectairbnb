@@ -12,21 +12,26 @@ const SpotIndexItem = ({spot}) => {
   }
 
   return (
-    <li>
-      <Link to={`/spots/${spot.id}`}>
+    <Link className="spotContainers" to={`/spots/${spot.id}`}>
         <div className="tooltip">
-          {spot.name}
-        </div>
+          <div className="info" title={spot.name}></div>
         <div className='li-contents-flex'>
+          {
+            spot.previewImage ?
+              <img src={spot.previewImage} alt={spot.name} />
+              :
+              <div>No Image available</div>
+          }
         <div>
           {spot.city}, {spot.state}
+          <i className="fas fa-star" />{spot.avgRating > 0 ? spot.avgRating : 0}
         </div>
         <div>
           ${spot.price} night
         </div>
+        </div>
       </div>
-      </Link>
-    </li>
+    </Link>
   )
 }
 
