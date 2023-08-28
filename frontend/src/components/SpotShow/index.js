@@ -61,36 +61,54 @@ const SpotShow = () => {
       <div className='body'>
         <h3>{spot.city}, {spot.state}, {spot.country}</h3>
       </div>
-      <div>
-        <img src={previewImage} alt="no image available" />
+      <div className="imagebox">
+        <div className="preview">
+          <img src={previewImage} alt="no image available" />
+        </div>
+        <div className="smallImages">
+          {
+            smallImages.map(image => {
+              return <div><img src={image} alt="no image available"/></div>
+            })
+          }
+        </div>
       </div>
+      <div>
+        <h2>Hosted by : {owner.firstName} {owner.lastName}</h2>
+      </div>
+      <div className="infobox">
+        <p>
+          description : {spot.description}
+        </p>
+        <div className="sidebox">
+          {spot.price} per night
+          <div>
+            <i className="fas fa-star" />{currentSpot.avgStarRating > 0 ? currentSpot.avgStarRating : 0}
+          </div>
+          <div>
+            {currentSpot.numReviews} Reviews
+          </div>
+          <div>
+          <OpenModalButton
+            buttonText="Reserve"
+            modalComponent={<div>Feature coming soon</div>}
+          />
+          </div>
+        </div>
+      </div>
+      <hr></hr>
+      <h2>
+        <i className="fas fa-star" />{currentSpot.avgStarRating > 0 ? currentSpot.avgStarRating : 0} -  {currentSpot.numReviews} Reviews
+      </h2>
       <div>
         {
-          smallImages.map(image => {
-            return <div><img src={image} alt="no image available"/></div>
+          reviews.map(review => {
+            return(<div>
+              <h4>{review.User.firstName}</h4>
+              {review.review}
+            </div>)
           })
         }
-      </div>
-      <div>
-        Hosted by : {owner.firstName} {owner.lastName}
-      </div>
-      <p>
-        description : {spot.description}
-      </p>
-      <div className="sidebox">
-        {spot.price} per night
-        <div>
-          <i className="fas fa-star" />{currentSpot.avgStarRating > 0 ? currentSpot.avgStarRating : 0}
-        </div>
-        <div>
-          {currentSpot.numReviews} Reviews
-        </div>
-        <div>
-        <OpenModalButton
-          buttonText="Reserve"
-          modalComponent={<div>Feature coming soon</div>}
-        />
-        </div>
       </div>
       <div>
         <OpenModalButton
