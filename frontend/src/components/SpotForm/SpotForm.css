@@ -3,3 +3,8 @@
   flex-direction: column;
   align-items: center;
 }
+
+.descriptionbox {
+  height: 100px;
+  width: 400px;
+}

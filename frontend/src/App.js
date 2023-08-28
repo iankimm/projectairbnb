@@ -10,6 +10,7 @@ import Management from "./components/Management";
 import logo from './favicon-32x32.png'
 import { Link } from "react-router-dom";
 import './App.css'
+import UpdateSpot from "./components/UpdateSpot";
 
 function App() {
   const dispatch = useDispatch();

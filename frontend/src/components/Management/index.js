@@ -27,6 +27,7 @@ const Management = () => {
     if(mySpots.length < 1) setSpotExists(false);
   }, [spotExists, dispatch])
 
+
   return (
     <div>
       <header>Manage Spots</header>
@@ -39,9 +40,7 @@ const Management = () => {
                 return (
                   <div>
                     <SpotIndexItem spot={spot} key={spot.id}/>
-                    <UpdateSpot spot={spot}/>
-                    update spot button
-                    delete button
+                    <button>Update</button>
                     <OpenModalButton
                     buttonText="Delete"
                     modalComponent={<DeleteSpotModal spotId={spot.id}/>}/>

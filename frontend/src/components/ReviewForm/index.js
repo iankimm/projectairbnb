@@ -13,7 +13,7 @@ const ReviewForm = ({ spotId}) => {
 
   //review information
   const [review, setReview] = useState('');
-  const [stars, setStars] = useState('');
+  const [stars, setStars] = useState(1);
 
   const [errors, setErrors] = useState({});
 
@@ -26,7 +26,7 @@ const ReviewForm = ({ spotId}) => {
     dispatch(createReviews(reviews, spotId))
     .then(closeModal)
     .then(dispatch(fetchSpotIdReviews(spotId)));
-    history.push(`/spots/${spotId}`)
+    window.location.reload();
   }
 
   return (

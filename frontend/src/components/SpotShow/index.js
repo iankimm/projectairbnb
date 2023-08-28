@@ -16,7 +16,7 @@ const SpotShow = () => {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const [reviewExists, setReviewExists] = useState(true);
+  const [reviewExists, setReviewExists] = useState(false);
 
   const spot = useSelector(state => {
     let arr = Object.values(state.spots)
@@ -45,9 +45,12 @@ const SpotShow = () => {
     dispatch(fetchSpotIdReviews(spotId))
     dispatch(fetchImageById(spotId))
 
+    reviews.forEach(review => {
+      if(userId === review.userId) setReviewExists(true)
+    })
+    if(reviews.length === 0) setReviewExists(true);
 
-
-  },[dispatch])
+  },[dispatch, reviewExists])
 
   return (
     <div>
@@ -92,7 +95,7 @@ const SpotShow = () => {
         <div className="sidebox">
           {currentSpot.price} per night
           <div>
-            <i className="fas fa-star" />{currentSpot.avgStarRating > 0 ? currentSpot.avgStarRating : 0}
+            <i className="fas fa-star" />{currentSpot.avgStarRating > 0 ? currentSpot.avgStarRating : 'NEW'}
           </div>
           <div>
             {currentSpot.numReviews} Reviews
@@ -107,13 +110,13 @@ const SpotShow = () => {
       </div>
       <hr></hr>
       <h2>
-        <i className="fas fa-star" />{currentSpot.avgStarRating > 0 ? currentSpot.avgStarRating : 0}
+        {currentSpot.avgStarRating > 0 ? (<><i className="fas fa-star" /> {currentSpot.avgStarRating}</>) : ""}
         {
           currentSpot.numReviews > 0 ?
           `· ${currentSpot.numReviews} Reviews`
           :
           currentSpot.ownerId != userId && userId ?
-          " Be the first to post a review!" : ""
+          "Be the first to post a review!" : ""
         }
       </h2>
       <div>
@@ -139,7 +142,7 @@ const SpotShow = () => {
       </div>
       <div>
         {
-          currentSpot.ownerId != userId && userId ?
+          currentSpot.ownerId != userId && userId && reviewExists ?
             <OpenModalButton
             buttonText="Post Your Review"
             modalComponent={<CreateReviewForm spotId={spotId}/>}

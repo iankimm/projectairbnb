@@ -7,6 +7,8 @@ import { insertSpot } from '../../store/spot';
 import { fetchSpotIdOwner } from '../../store/currentSpotOwner';
 import { fetchSpotIdReviews } from '../../store/review';
 import { fetchImageById } from '../../store/image';
+import * as sessionActions from '../../store/spot'
+
 
 const SpotForm = ({ spot, formType}) => {
   const history = useHistory();
@@ -32,13 +34,32 @@ const SpotForm = ({ spot, formType}) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrors({});
 
-    //needs to be added to state
-    spot = {address, city, state, country, lat, lng, name, description, price, previewImage, oneImage, twoImage, threeImage, fourImage};
-    const createdSpot = await dispatch(insertSpot(spot))
-    const spotId = createdSpot.id;
-    history.push(`/spots/${spotId}`);
+    if (e) {
+      setErrors({});
+      if(lat === '') setLat("0");
+      if(lng === '') setLng("0");
+      return dispatch(
+        sessionActions.insertSpot({
+          address, city, state, country, lat, lng, name, description, price, previewImage, oneImage, twoImage, threeImage, fourImage
+        })
+      )
+        .then(response => history.push(`/spots/${response.id}`))
+        .catch(async (res) => {
+          const data = await res.json();
+          if (data && data.errors) {
+            setErrors(data.errors);
+          }
+        });
+    }
+
+    // if(lat === '') setLat("0");
+    // if(lng === '') setLng("0");
+    // //needs to be added to state
+    // spot = {address, city, state, country, lat, lng, name, description, price, previewImage, oneImage, twoImage, threeImage, fourImage};
+    // const createdSpot = await dispatch(insertSpot(spot))
+    // const spotId = createdSpot.id;
+    // history.push(`/spots/${spotId}`);
   }
 
   return (
@@ -92,21 +113,23 @@ const SpotForm = ({ spot, formType}) => {
       </div>
       <div>
         <label>
-          lat:
+          Latitude:
           <input
             type="text"
             value={lat}
             onChange={(e)=> setLat(e.target.value)}
+            placeholder="OPTIONAL FOR MVP"
           />
         </label>
       </div>
       <div>
         <label>
-          lng:
+          longitude:
           <input
             type="text"
             value={lng}
             onChange={(e)=> setLng(e.target.value)}
+            placeholder="OPTIONAL FOR MVP"
           />
         </label>
       </div>
@@ -120,9 +143,10 @@ const SpotForm = ({ spot, formType}) => {
           <label>
           description:
           <input
+            className="descriptionbox"
             type="text"
             value={description}
-            placehoder='Please write atleast 30 characters'
+            placeholder='Please write atleast 30 characters'
             onChange={(e)=> setDescription(e.target.value)}
           />
           </label>
