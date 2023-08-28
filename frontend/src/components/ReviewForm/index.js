@@ -3,11 +3,13 @@ import './ReviewForm.css'
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { createReviews } from '../../store/review';
+import { createReviews, fetchSpotIdReviews } from '../../store/review';
+import { useModal } from '../../context/Modal';
 
 const ReviewForm = ({ spotId}) => {
   const history = useHistory();
   const dispatch = useDispatch();
+  const {closeModal} = useModal();
 
   //review information
   const [review, setReview] = useState('');
@@ -21,19 +23,21 @@ const ReviewForm = ({ spotId}) => {
 
     //needs to be added to state
     let reviews = {review, stars};
-    console.log("REVIEW", review)
-    dispatch(createReviews(reviews, spotId));
+    dispatch(createReviews(reviews, spotId))
+    .then(closeModal)
+    .then(dispatch(fetchSpotIdReviews(spotId)));
+    history.push(`/spots/${spotId}`)
   }
 
   return (
     <form onSubmit={handleSubmit}>
-      <title>How was your stay?</title>
+      <div className="ReviewFormTitle">How was your stay?</div>
       <label>
         Reviews :
         <input
           type="text"
           value={review}
-          placehoder='Leave your review here'
+          placeholder='Leave your review here'
           onChange={(e)=> setReview(e.target.value)}
         />
       </label>
@@ -47,7 +51,10 @@ const ReviewForm = ({ spotId}) => {
           <option value='5'>5</option>
         </select>
       </label>
-      <button type="submit">Submit Your Review</button>
+      <button type="submit"
+      disabled={
+        review.length < 10
+      }>Submit Your Review</button>
     </form>
   )
 }

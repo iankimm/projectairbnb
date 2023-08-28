@@ -140,7 +140,7 @@ const UpdateSpot = ({spot}) => {
         </div>
       </div>
 
-      <button type="submit">Create Spot</button>
+      <button type="submit">Update</button>
     </form>
   )
 };

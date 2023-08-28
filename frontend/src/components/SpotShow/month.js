@@ -1,7 +1,6 @@
 
 const Month = ({review}) => {
   const array = review.createdAt.split('-');
-  console.log(array);
   let month;
 
   if(array[1] === '08') month = 'August';

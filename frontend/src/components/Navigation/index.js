@@ -53,6 +53,15 @@ function Navigation({ isLoaded }) {
     );
   }
 
+  let newSpot;
+  if(sessionUser) {
+    newSpot =  (
+      <a href='/spots/new'>
+        <button>Create a New Spot</button>
+      </a>
+    )
+  }
+
 
 
   useEffect(() => {
@@ -71,6 +80,7 @@ function Navigation({ isLoaded }) {
 
   return (
     <div className='dropdown'>
+      {isLoaded && newSpot}
       <ul>
         {isLoaded && sessionLinks}
       </ul>

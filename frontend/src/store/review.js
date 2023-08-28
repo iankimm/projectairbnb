@@ -61,10 +61,9 @@ const reviewReducer = (state = {}, action) => {
       return {...state, [action.review.id]: action.Review}
     case LOAD_REVIEW:
       const newState ={};
-      // action.reviews.forEach((review) => {
-      //   newState[review.id] = review;
-      // })
       return action.reviews.Reviews
+    case REMOVE_REVIEW:
+      return {...state}
     default:
       return state;
   }

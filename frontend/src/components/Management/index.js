@@ -1,29 +1,29 @@
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import './Management.css'
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import SpotIndexItem from '../SpotIndexItem';
 import UpdateSpot from '../UpdateSpot';
+import DeleteSpotModal from '../DeleteSpot';
+import OpenModalButton from '../OpenModalButton';
+import { fetchSpots } from '../../store/spot';
 
 const Management = () => {
+  const dispatch = useDispatch();
   const currentUser = useSelector(state => state.session.user)
   const spots = useSelector(state => Object.values(state.spots))
 
   const [spotExists, setSpotExists] = useState(false);
 
-  console.log('currentUser', currentUser);
-  console.log('spots', spots);
-  console.log('spotownerId', spots[0].ownerId)
-
   let mySpots = [];
-
-  spots.forEach(spot => {
-    if(spot.ownerId === currentUser.id) mySpots.push(spot)
-  })
-
-  console.log('mySpots', mySpots)
+  if(currentUser && spots){
+    spots.forEach(spot => {
+      if(spot.ownerId === currentUser.id) mySpots.push(spot)
+    })
+  }
 
   useEffect(() => {
+    dispatch(fetchSpots(spots))
     if(mySpots.length > 0) setSpotExists(true);
   }, [spotExists])
 
@@ -40,7 +40,11 @@ const Management = () => {
                   <div>
                     <SpotIndexItem spot={spot} key={spot.id}/>
                     <UpdateSpot spot={spot}/>
-                    button
+                    update spot button
+                    delete button
+                    <OpenModalButton
+                    buttonText="Delete"
+                    modalComponent={<DeleteSpotModal spotId={spot.id}/>}/>
                   </div>
                 )
               })

@@ -51,10 +51,12 @@ export const insertSpot = (payload) => async (dispatch) => {
   });
   const data = await response.json();
   dispatch(fetchSpots(data));
-  return response;
+  return data;
 };
 
-export const editSpot = (payload) => async (dispatch) => {
+
+
+export const editSpot = (spotId, payload) => async (dispatch) => {
   const response = await csrfFetch(`/api/spots/${payload}`, {
     method: "PUT",
     headers: {
@@ -97,7 +99,9 @@ const spotReducer = (state = {}, action) => {
     case UPDATE_SPOT:
       return {...state, spots: [...state.spots, action.spot] }
     case REMOVE_SPOT:
-      return {...state}
+      return {
+        ...state
+      }
     default:
       return state;
   }

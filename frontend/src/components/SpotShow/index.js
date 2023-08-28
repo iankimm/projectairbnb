@@ -9,11 +9,15 @@ import { fetchSpotIdReviews } from '../../store/review';
 import CreateReviewForm from '../CreateReview';
 import { fetchImageById } from '../../store/image';
 import Month from './month';
+import DeleteReviewModal from '../DeleteReview';
 
 const SpotShow = () => {
   const { spotId } = useParams();
   const history = useHistory();
   const dispatch = useDispatch();
+
+  const [reviewExists, setReviewExists] = useState(true);
+
   const spot = useSelector(state => {
     let arr = Object.values(state.spots)
     let temp;
@@ -22,6 +26,10 @@ const SpotShow = () => {
     }
     return temp;
   })
+
+  let user = useSelector(state => state.session)
+  let userId = ''
+  if(user.user) userId = user.user.id;
 
   const reviews = useSelector(state => Object.values(state.review))
 
@@ -38,19 +46,21 @@ const SpotShow = () => {
   //need to add images
 
 
+
   useEffect(() => {
     dispatch(fetchSpotIdOwner(spotId))
     dispatch(fetchSpotIdReviews(spotId))
     dispatch(fetchImageById(spotId))
+
   },[dispatch])
 
   return (
     <div>
       <div className='header'>
-        <h1>{spot.name}</h1>
+        <h1>{currentSpot.name}</h1>
       </div>
       <div className='body'>
-        <h3>{spot.city}, {spot.state}, {spot.country}</h3>
+        <h3>{currentSpot.city}, {currentSpot.state}, {currentSpot.country}</h3>
       </div>
       <div className="imagebox">
         <div className="preview">
@@ -69,10 +79,10 @@ const SpotShow = () => {
       </div>
       <div className="infobox">
         <p>
-          description : {spot.description}
+          description : {currentSpot.description}
         </p>
         <div className="sidebox">
-          {spot.price} per night
+          {currentSpot.price} per night
           <div>
             <i className="fas fa-star" />{currentSpot.avgStarRating > 0 ? currentSpot.avgStarRating : 0}
           </div>
@@ -94,7 +104,8 @@ const SpotShow = () => {
           currentSpot.numReviews > 0 ?
           `· ${currentSpot.numReviews} Reviews`
           :
-          ""
+          currentSpot.ownerId != userId && userId ?
+          " Be the first to post a review!" : ""
         }
       </h2>
       <div>
@@ -105,15 +116,30 @@ const SpotShow = () => {
               <div className="reviewname">{review.User.firstName}</div>
               <Month review={review}/>
               {review.review}
+              <div>
+                {
+                  review.userId === userId ?
+                  <OpenModalButton
+                  buttonText="Delete"
+                  modalComponent={<DeleteReviewModal reviewId={review.id}/>}/>
+                  : ""
+                }
+              </div>
             </div>)
           })
         }
       </div>
       <div>
-        <OpenModalButton
-          buttonText="Post Your Review"
-          modalComponent={<CreateReviewForm spotId={spotId}/>}
-        />
+        {
+          currentSpot.ownerId != userId && userId ?
+            <OpenModalButton
+            buttonText="Post Your Review"
+            modalComponent={<CreateReviewForm spotId={spotId}/>}
+            />
+            :
+            ""
+          }
+
       </div>
       <div>
         <Link to={`/`}>
