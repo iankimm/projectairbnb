@@ -82,7 +82,6 @@ export const deleteSpots = (payload) => async (dispatch) => {
 }
 
 
-
 //reducer
 
 const spotReducer = (state = {}, action) => {
