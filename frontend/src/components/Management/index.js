@@ -13,7 +13,7 @@ const Management = () => {
   const currentUser = useSelector(state => state.session.user)
   const spots = useSelector(state => Object.values(state.spots))
 
-  const [spotExists, setSpotExists] = useState(false);
+  const [spotExists, setSpotExists] = useState(true);
 
   let mySpots = [];
   if(currentUser && spots){
@@ -24,8 +24,8 @@ const Management = () => {
 
   useEffect(() => {
     dispatch(fetchSpots(spots))
-    if(mySpots.length > 0) setSpotExists(true);
-  }, [spotExists])
+    if(mySpots.length < 1) setSpotExists(false);
+  }, [spotExists, dispatch])
 
   return (
     <div>

@@ -35,6 +35,7 @@ export const fetchSpots = (payload) => async (dispatch) => {
 
 export const insertSpot = (payload) => async (dispatch) => {
   const { address, city, state, country, lat, lng, name, description, price } = payload;
+  const { previewImage, oneImage, twoImage, threeImage, fourImage} = payload;
   const response = await csrfFetch("/api/spots", {
     method: "POST",
     body: JSON.stringify({
@@ -50,6 +51,77 @@ export const insertSpot = (payload) => async (dispatch) => {
     }),
   });
   const data = await response.json();
+
+  if(data.id && previewImage) {
+    const previewImageLoad = await csrfFetch(`/api/spots/${data.id}/images`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        url: previewImage,
+        preview: true
+      })
+    })
+  }
+
+  if(data.id && oneImage) {
+    const previewImageLoad = await csrfFetch(`/api/spots/${data.id}/images`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        url: oneImage,
+        preview: false
+      })
+    })
+  }
+
+  if(data.id && twoImage) {
+    const previewImageLoad = await csrfFetch(`/api/spots/${data.id}/images`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        url: twoImage,
+        preview: false
+      })
+    })
+  }
+
+  if(data.id && threeImage) {
+    const previewImageLoad = await csrfFetch(`/api/spots/${data.id}/images`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        url: threeImage,
+        preview: false
+      })
+    })
+  }
+
+  if(data.id && fourImage) {
+    const previewImageLoad = await csrfFetch(`/api/spots/${data.id}/images`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        url: fourImage,
+        preview: false
+      })
+    })
+  }
+
   dispatch(fetchSpots(data));
   return data;
 };
@@ -71,13 +143,29 @@ export const editSpot = (spotId, payload) => async (dispatch) => {
   return spot;
 }
 
+export const deleteImages = (payload) => async (dispatch) => {
+  const response = await csrfFetch(`/api/spot-images/${payload}`, {
+    method: "DELETE"
+  });
+  if(response.ok) {
+    dispatch(removeSpot(payload));
+  }
+}
+
 export const deleteSpots = (payload) => async (dispatch) => {
+  // const removeImage = await csrfFetch(`/api/spots/${payload}/images`, {
+  //   method: "DELETE",
+  //   headers: {
+  //     "Content-Type" : "application/json"
+  //   }
+  // });
+
   const response = await csrfFetch(`/api/spots/${payload}`, {
     method: "DELETE",
     headers: {
       "Content-Type" : "application/json"
     }
-  });
+  })
   if(response.ok) {
     dispatch(removeSpot(payload));
   }

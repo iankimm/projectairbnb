@@ -1,16 +1,9 @@
 import './SpotIndex.css'
 
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 
 const SpotIndexItem = ({spot}) => {
-  const dispatch = useDispatch();
-
-  const handleDelete = (e) => {
-    e.preventDefault();
-    //must add delete dispatch
-  }
-
+  const averageRating = spot.avgRating;
   return (
     <Link className="spotContainers" to={`/spots/${spot.id}`}>
         <div className="tooltip">
@@ -19,13 +12,13 @@ const SpotIndexItem = ({spot}) => {
         <div className='li-contents-flex'>
           {
             spot.previewImage ?
-              <img src={spot.previewImage} alt={spot.name} />
+              <img src={""} alt={spot.name} />
               :
               <div>No Image available</div>
           }
         <div>
           {spot.city}, {spot.state}
-          <i className="fas fa-star" />{spot.avgRating > 0 ? spot.avgRating : 'New'}
+          <i className="fas fa-star" /> {averageRating > 0 ? averageRating : 'New'}
         </div>
         <div>
           ${spot.price} night

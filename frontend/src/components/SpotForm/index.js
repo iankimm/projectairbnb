@@ -35,12 +35,7 @@ const SpotForm = ({ spot, formType}) => {
     setErrors({});
 
     //needs to be added to state
-    console.log(previewImage)
-    console.log(oneImage)
-    console.log(twoImage)
-    console.log(threeImage)
-    console.log(fourImage)
-    spot = {address, city, state, country, lat, lng, name, description, price};
+    spot = {address, city, state, country, lat, lng, name, description, price, previewImage, oneImage, twoImage, threeImage, fourImage};
     const createdSpot = await dispatch(insertSpot(spot))
     const spotId = createdSpot.id;
     history.push(`/spots/${spotId}`);
@@ -172,31 +167,31 @@ const SpotForm = ({ spot, formType}) => {
           <input
           type="text"
           placeholder='Preview Image URL'
-          onChange={(e) => setPreviewImage({url: e.target.value, preview: 'true'})}
+          onChange={(e) => setPreviewImage(e.target.value)}
           required />
           <div>
             <input
             type="text"
             placeholder='Image URL'
-            onChange={(e) => setOneImage({url: e.target.value, preview: 'false'})} />
+            onChange={(e) => setOneImage(e.target.value)} />
           </div>
           <div>
             <input
             type="text"
             placeholder='Image URL'
-            onChange={(e) => setTwoImage({url: e.target.value, preview: 'false'})} />
+            onChange={(e) => setTwoImage(e.target.value)} />
           </div>
           <div>
             <input
             type="text"
             placeholder='Image URL'
-            onChange={(e) => setThreeImage({url: e.target.value, preview: 'false'})} />
+            onChange={(e) => setThreeImage(e.target.value)} />
           </div>
           <div>
             <input
             type="text"
             placeholder='Image URL'
-            onChange={(e) => setFourImage({url: e.target.value, preview: 'false'})} />
+            onChange={(e) => setFourImage(e.target.value)} />
           </div>
         </div>
       </div>

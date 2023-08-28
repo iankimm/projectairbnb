@@ -51,7 +51,6 @@ const SpotShow = () => {
     dispatch(fetchSpotIdOwner(spotId))
     dispatch(fetchSpotIdReviews(spotId))
     dispatch(fetchImageById(spotId))
-
   },[dispatch])
 
   return (

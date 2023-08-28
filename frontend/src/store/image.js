@@ -10,8 +10,8 @@ export const loadSpotImage = (spot) => ({
 export const fetchImageById = (payload) => async (dispatch) => {
   const response = await csrfFetch(`/api/spots/${payload}`);
   const spot = await response.json();
-  console.log('spot', spot);
   dispatch(loadSpotImage(spot));
+  return spot;
 }
 
 const spotImageReducer = (state = {}, action) => {
