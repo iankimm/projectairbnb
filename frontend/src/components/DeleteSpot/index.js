@@ -14,7 +14,6 @@ const DeleteSpotModal = ({spotId}) => {
     dispatch(deleteSpots(spotId))
     .then(closeModal)
 
-    console.log('spotId', spotId)
     history.push('/users/manage');
   }
 

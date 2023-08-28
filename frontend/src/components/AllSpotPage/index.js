@@ -18,9 +18,6 @@ const SpotIndex = () => {
 
   return (
     <section>
-      <Link className="add-report" to="/spots/new">
-        Add a Spot
-      </Link>
       <div className="spotContainer">
       {
       spots.map((spot) => (

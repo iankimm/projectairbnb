@@ -1,12 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ProfileButton from "./ProfileButton";
 import OpenModalButton from "../OpenModalButton";
 import LoginFormModal from "../LoginFormModal";
 import SignupFormModal from "../SignupFormModal";
 import "./Navigation.css";
-import { Link } from "react-router-dom";
 
 function Navigation({ isLoaded }) {
   const sessionUser = useSelector((state) => state.session.user);
@@ -30,7 +28,7 @@ function Navigation({ isLoaded }) {
     );
   } else {
     sessionLinks = (
-      <div>
+      <div className="LoginBox">
         <button onClick={openMenu}>
           <i className="fas fa-user-circle" />
         </button>
@@ -81,7 +79,7 @@ function Navigation({ isLoaded }) {
   return (
     <div className='dropdown'>
       {isLoaded && newSpot}
-      <ul>
+      <ul className="usermenu">
         {isLoaded && sessionLinks}
       </ul>
     </div>
