@@ -47,7 +47,7 @@ const SpotForm = ({ spot, formType}) => {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="spotformform">
       <title>{formType}</title>
       <h2>{formType}</h2>
       <div>
@@ -55,69 +55,83 @@ const SpotForm = ({ spot, formType}) => {
         <div>
           Guest will only get your exact address once they booked a reservation
         </div>
+        <div>
+          <label>
+          address:
+          <input
+            type="text"
+            value={address}
+            onChange={(e)=> setAddress(e.target.value)}
+          />
+        </label>
+      </div>
+      <div>
         <label>
-        address:
-        <input
-          type="text"
-          value={address}
-          onChange={(e)=> setAddress(e.target.value)}
-        />
-      </label>
-      <label>
-        city:
-        <input
-          type="text"
-          value={city}
-          onChange={(e)=> setCity(e.target.value)}
-        />
-      </label>
-      <label>
-        state:
-        <input
-          type="text"
-          value={state}
-          onChange={(e)=> setState(e.target.value)}
-        />
-      </label>
-      <label>
-        country:
-        <input
-          type="text"
-          value={country}
-          onChange={(e)=> setCountry(e.target.value)}
-        />
-      </label>
-      <label>
-        lat:
-        <input
-          type="text"
-          value={lat}
-          onChange={(e)=> setLat(e.target.value)}
-        />
-      </label>
-      <label>
-        lng:
-        <input
-          type="text"
-          value={lng}
-          onChange={(e)=> setLng(e.target.value)}
-        />
-      </label>
+          city:
+          <input
+            type="text"
+            value={city}
+            onChange={(e)=> setCity(e.target.value)}
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          state:
+          <input
+            type="text"
+            value={state}
+            onChange={(e)=> setState(e.target.value)}
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          country:
+          <input
+            type="text"
+            value={country}
+            onChange={(e)=> setCountry(e.target.value)}
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          lat:
+          <input
+            type="text"
+            value={lat}
+            onChange={(e)=> setLat(e.target.value)}
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          lng:
+          <input
+            type="text"
+            value={lng}
+            onChange={(e)=> setLng(e.target.value)}
+          />
+        </label>
+      </div>
       </div>
       <div>
         <header>Describe your place to guests</header>
         <div>
           Mention the best features of your space, any special amentities like fast wifi or parking, and what you love about the nieghborhood.
         </div>
-        <label>
-        description:
-        <input
-          type="text"
-          value={description}
-          placehoder='Please write atleast 30 characters'
-          onChange={(e)=> setDescription(e.target.value)}
-        />
-      </label>
+        <div>
+          <label>
+          description:
+          <input
+            type="text"
+            value={description}
+            placehoder='Please write atleast 30 characters'
+            onChange={(e)=> setDescription(e.target.value)}
+          />
+          </label>
+        </div>
       </div>
       <div>
         <header>Create a title for your spot</header>
