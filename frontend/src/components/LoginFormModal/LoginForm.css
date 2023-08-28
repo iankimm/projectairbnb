@@ -1,0 +1,17 @@
+
+.loginformform {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.loginform {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin: 15px;
+}
+
+.errorMsg {
+  color: red;
+}

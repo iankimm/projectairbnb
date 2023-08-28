@@ -4,8 +4,10 @@ import * as sessionActions from "../../store/session";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import "./LoginForm.css";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 function LoginFormModal() {
+  const history = useHistory();
   const dispatch = useDispatch();
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
@@ -24,8 +26,9 @@ function LoginFormModal() {
         if (data && (typeof data === 'object')) {
           setErrors(errorMsg);
         }
-        console.log('errors', errors)
-      });
+      })
+      .then(history.push('/'));
+
   };
 
   const demoLogin = () => {
@@ -34,40 +37,50 @@ function LoginFormModal() {
 
     return dispatch(sessionActions.login({ credential: demoId, password: demoPw }))
       .then(closeModal)
+      .then(history.push('/'))
   }
 
   return (
-    <>
-      <h1>Log In</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Username or Email
-          <input
-            type="text"
-            value={credential}
-            onChange={(e) => setCredential(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          Password
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </label>
-        {errors.length > 3 && (
-          <p>{errors}</p>
-        )}
-        <button type="submit"
-        disabled={credential.length < 4 || password.length < 6}>
-          Log In
-        </button>
-        <button onClick={demoLogin}>Log in as Demo User</button>
+    <div className="loginform">
+      <h1 className='loginformheader'>Log In</h1>
+      {errors.length > 3 && (
+            <p className="errorMsg">{errors}</p>
+          )}
+      <form onSubmit={handleSubmit} className="loginformform">
+        <div className="example">
+          <label>
+            <input
+              type="text"
+              value={credential}
+              onChange={(e) => setCredential(e.target.value)}
+              placeholder="Username or Email"
+              required
+            />
+          </label>
+        </div>
+        <div>
+          <label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Password"
+              required
+            />
+          </label>
+        </div>
+        <div>
+
+          <button type="submit"
+          disabled={credential.length < 4 || password.length < 6}>
+            Log In
+          </button>
+        </div>
+        <div>
+          <button onClick={demoLogin}>Log in as Demo User</button>
+        </div>
       </form>
-    </>
+    </div>
   );
 }
 
