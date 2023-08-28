@@ -34,18 +34,8 @@ const SpotShow = () => {
   let tempImages = [];
   let smallImages = [];
 
-  for(let i = 0; i < images.length; i++){
-    if(images[i].preview) {
-      previewImage = images[i].url;
-    }
-    else tempImages.push(images[i].url)
-  }
+  //need to add images
 
-  for(let i = 0; i < 4; i++) {
-    if(tempImages[i]) smallImages.push(tempImages[i])
-    else smallImages.push('')
-  }
-  console.log(smallImages)
 
   useEffect(() => {
     dispatch(fetchSpotIdOwner(spotId))
@@ -103,8 +93,9 @@ const SpotShow = () => {
       <div>
         {
           reviews.map(review => {
-            return(<div>
-              <h4>{review.User.firstName}</h4>
+            return(
+            <div>
+              <div className="reviewname">{review.User.firstName}</div>
               {review.review}
             </div>)
           })
@@ -115,17 +106,6 @@ const SpotShow = () => {
           buttonText="Post Your Review"
           modalComponent={<CreateReviewForm spotId={spotId}/>}
         />
-      </div>
-      <div>
-        Review List :
-        {
-          reviews.map(review => {
-            return(<div>
-                <div>Review : {review.review}</div>
-                <div>Stars : {review.stars}</div>
-              </div>)
-          })
-        }
       </div>
       <div>
         <Link to={`/`}>
