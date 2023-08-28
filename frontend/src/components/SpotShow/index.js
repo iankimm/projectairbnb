@@ -30,7 +30,22 @@ const SpotShow = () => {
 
   const currentSpot = useSelector(state => state.currentSpot)
 
+  let previewImage = '';
+  let tempImages = [];
+  let smallImages = [];
 
+  for(let i = 0; i < images.length; i++){
+    if(images[i].preview) {
+      previewImage = images[i].url;
+    }
+    else tempImages.push(images[i].url)
+  }
+
+  for(let i = 0; i < 4; i++) {
+    if(tempImages[i]) smallImages.push(tempImages[i])
+    else smallImages.push('')
+  }
+  console.log(smallImages)
 
   useEffect(() => {
     dispatch(fetchSpotIdOwner(spotId))
@@ -46,15 +61,30 @@ const SpotShow = () => {
       <div className='body'>
         <h3>{spot.city}, {spot.state}, {spot.country}</h3>
       </div>
-
+      <div>
+        <img src={previewImage} alt="no image available" />
+      </div>
+      <div>
+        {
+          smallImages.map(image => {
+            return <div><img src={image} alt="no image available"/></div>
+          })
+        }
+      </div>
       <div>
         Hosted by : {owner.firstName} {owner.lastName}
       </div>
       <p>
         description : {spot.description}
       </p>
-      <div>
+      <div className="sidebox">
         {spot.price} per night
+        <div>
+          <i className="fas fa-star" />{currentSpot.avgStarRating > 0 ? currentSpot.avgStarRating : 0}
+        </div>
+        <div>
+          {currentSpot.numReviews} Reviews
+        </div>
         <div>
         <OpenModalButton
           buttonText="Reserve"
