@@ -67,57 +67,65 @@ const SpotForm = ({ spot, formType}) => {
       <title>{formType}</title>
       <h2>{formType}</h2>
       <div>
-        <header>Where's your place located?</header>
+        <div className="spotformtitle">Where's your place located?</div>
         <div>
           Guest will only get your exact address once they booked a reservation
         </div>
+        <br></br>
         <div>
-          <label>
-          address:
-          <input
-            type="text"
-            value={address}
-            onChange={(e)=> setAddress(e.target.value)}
-          />
-        </label>
-        <div>{errors.address && <p>{errors.address}</p>}</div>
-      </div>
-      <div>
         <label>
-          city:
-          <input
-            type="text"
-            value={city}
-            onChange={(e)=> setCity(e.target.value)}
-          />
-        </label>
-        <div>{errors.city && <p>{errors.city}</p>}</div>
-      </div>
-      <div>
-        <label>
-          state:
-          <input
-            type="text"
-            value={state}
-            onChange={(e)=> setState(e.target.value)}
-          />
-        </label>
-        <div>{errors.state && <p>{errors.state}</p>}</div>
-      </div>
-      <div>
-        <label>
-          country:
+          <div>
+          Country: {errors.country && <p>{errors.country}</p>}
+          </div>
           <input
             type="text"
             value={country}
             onChange={(e)=> setCountry(e.target.value)}
+            placeholder="country"
           />
         </label>
-        <div>{errors.country && <p>{errors.country}</p>}</div>
+
       </div>
+        <div>
+          <label>
+            <div>
+              Address: {errors.address && <p>{errors.address}</p>}
+            </div>
+          <input
+            type="text"
+            value={address}
+            onChange={(e)=> setAddress(e.target.value)}
+            placeholder="address"
+          />
+        </label>
+
+      </div>
+        <label>
+          <div>
+            City: {errors.city && <p>{errors.city}</p>}  {errors.state && <p>{errors.state}</p>}
+          </div>
+          <input
+            type="text"
+            value={city}
+            onChange={(e)=> setCity(e.target.value)}
+            placeholder="city"
+          />
+        </label>
+        <label>
+          ,
+          <input
+            type="text"
+            value={state}
+            onChange={(e)=> setState(e.target.value)}
+            placeholder="state"
+          />
+        </label>
+
       <div>
         <label>
+          <div>
           Latitude:
+          </div>
           <input
             type="text"
             value={lat}
@@ -129,7 +137,9 @@ const SpotForm = ({ spot, formType}) => {
       </div>
       <div>
         <label>
-          longitude:
+          <div>
+          Longitude:
+          </div>
           <input
             type="text"
             value={lng}
@@ -140,14 +150,14 @@ const SpotForm = ({ spot, formType}) => {
         <div>{errors.lng && <p>{errors.lng}</p>}</div>
       </div>
       </div>
+      <hr></hr>
       <div>
-        <header>Describe your place to guests</header>
+        <div className="spotformtitle">Describe your place to guests</div>
         <div>
-          Mention the best features of your space, any special amentities like fast wifi or parking, and what you love about the nieghborhood.
+          Mention the best features of your space, any special amentities like <br></br>fast wifi or parking, and what you love about the nieghborhood.
         </div>
         <div>
           <label>
-          description:
           <input
             className="descriptionbox"
             type="text"
@@ -159,13 +169,13 @@ const SpotForm = ({ spot, formType}) => {
           <div>{errors.description && <p>{errors.description}</p>}</div>
         </div>
       </div>
+      <hr></hr>
       <div>
-        <header>Create a title for your spot</header>
+        <div className="spotformtitle">Create a title for your spot</div>
         <div>
-          Catch guests' attention with a spot title that highlights what makes your place special.
+          Catch guests' attention with a spot title that highlights what makes<br></br> your place special.
         </div>
         <label>
-        name:
         <input
           type="text"
           value={name}
@@ -175,24 +185,26 @@ const SpotForm = ({ spot, formType}) => {
       </label>
       <div>{errors.name && <p>{errors.name}</p>}</div>
       </div>
+      <hr></hr>
       <div>
-        <header>Set a base price for your spot</header>
+      <div className="spotformtitle">Set a base price for your spot</div>
         <div>
-          Competitive pricing can help your listing stand out and rank higher in search results.
+          Competitive pricing can help your listing stand out and rank higher<br></br> in search results.
         </div>
         <label>
-        price:
+        $
         <input
           type="text"
           value={price}
-          placeholder='Price per night (USE)'
+          placeholder='Price per night (USD)'
           onChange={(e)=> setPrice(e.target.value)}
         />
       </label>
       <div>{errors.price && <p>{errors.price}</p>}</div>
       </div>
+      <hr></hr>
       <div>
-        <header>Liven up your spot with photos</header>
+      <div className="spotformtitle">Liven up your spot with photos</div>
         <div>
           Submit a link to at least one photo to publish your spot
         </div>
@@ -228,6 +240,7 @@ const SpotForm = ({ spot, formType}) => {
           </div>
         </div>
       </div>
+      <hr></hr>
 
       <button type="submit">Create Spot</button>
     </form>
