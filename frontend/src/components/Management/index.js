@@ -9,8 +9,11 @@ import OpenModalButton from '../OpenModalButton';
 import { fetchSpots } from '../../store/spot';
 
 const Management = () => {
+
   const dispatch = useDispatch();
+
   const currentUser = useSelector(state => state.session.user)
+
   const spots = useSelector(state => Object.values(state.spots))
 
   const [spotExists, setSpotExists] = useState(true);
@@ -24,8 +27,11 @@ const Management = () => {
 
   useEffect(() => {
     dispatch(fetchSpots(spots))
-    if(mySpots.length < 1) setSpotExists(false);
-  }, [spotExists, dispatch])
+    //if(mySpots.length < 1) setSpotExists(false);
+
+
+
+  }, [dispatch])
 
 
   return (

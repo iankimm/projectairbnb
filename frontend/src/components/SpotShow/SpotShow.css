@@ -45,12 +45,13 @@
 
 .SpotDetailSmallImages {
   height : 150px;
+  width : 250px;
 }
 
 .smallImages {
   display : grid;
   grid-template-columns: repeat(2, 1fr);
-  padding: 0 1% 1% 1%
+  padding: 0 1% 1% 1%;
 }
 
 .sidebox {

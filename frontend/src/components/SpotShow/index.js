@@ -46,14 +46,10 @@ const SpotShow = () => {
     dispatch(fetchImageById(spotId))
 
     reviews.forEach(review => {
-      console.log('review.userId', review.userId)
-      console.log('userId', userId)
-      if(userId == review.userId) setReviewExists(true)
+      if(parseInt(userId) == parseInt(review.userId)) {setReviewExists(true)}
     })
-    if(reviews.length === 0) setReviewExists(false);
 
   },[dispatch, reviewExists])
-
 
 
   return (
@@ -111,7 +107,7 @@ const SpotShow = () => {
       </div>
       <hr></hr>
       <h2>
-        {currentSpot.avgStarRating > 0 ? (<><i className="fas fa-star" /> {currentSpot.avgStarRating.toFixed(1)}</>) : ""}
+      <i className="fas fa-star" /> {currentSpot.avgStarRating > 0 ? (<>{currentSpot.avgStarRating.toFixed(1)}</>) : "NEW"}
         {
           currentSpot.numReviews == 1 ?
           `· ${currentSpot.numReviews} Review`
@@ -120,9 +116,21 @@ const SpotShow = () => {
           `· ${currentSpot.numReviews} Reviews`
           :
           currentSpot.ownerId != userId && userId ?
-          "Be the first to post a review!" : ""
+          " Be the first to post a review!" : ""
         }
       </h2>
+      <div>
+        {
+          currentSpot.ownerId != userId && !reviewExists && userId ?
+            <OpenModalButton
+            buttonText="Post Your Review"
+            modalComponent={<CreateReviewForm spotId={spotId}/>}
+            />
+            :
+            ""
+          }
+
+      </div>
       <div>
         {
           reviews.map(review => {
@@ -144,18 +152,7 @@ const SpotShow = () => {
           })
         }
       </div>
-      <div>
-        {
-          (currentSpot.ownerId != userId) && reviews.length < 1?
-            <OpenModalButton
-            buttonText="Post Your Review"
-            modalComponent={<CreateReviewForm spotId={spotId}/>}
-            />
-            :
-            ""
-          }
 
-      </div>
       <div>
         <Link to={`/`}>
           Back
