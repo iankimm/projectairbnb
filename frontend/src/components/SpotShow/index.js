@@ -31,7 +31,7 @@ const SpotShow = () => {
   let userId = ''
   if(user.user) userId = user.user.id;
 
-  const reviews = useSelector(state => Object.values(state.review))
+  const reviews = useSelector(state => Object.values(state.review)).reverse();
 
   const owner = useSelector(state => state.currentSpotOwner)
 
@@ -46,11 +46,15 @@ const SpotShow = () => {
     dispatch(fetchImageById(spotId))
 
     reviews.forEach(review => {
-      if(userId === review.userId) setReviewExists(true)
+      console.log('review.userId', review.userId)
+      console.log('userId', userId)
+      if(userId == review.userId) setReviewExists(true)
     })
-    if(reviews.length === 0) setReviewExists(true);
+    if(reviews.length === 0) setReviewExists(false);
 
   },[dispatch, reviewExists])
+
+
 
   return (
     <div>
@@ -85,20 +89,17 @@ const SpotShow = () => {
           </div>
         </div>
       </div>
+      <div className="infobox">
       <div>
         <h2>Hosted by : {owner.firstName} {owner.lastName}</h2>
-      </div>
-      <div className="infobox">
         <p>
           description : {currentSpot.description}
         </p>
+      </div>
         <div className="sidebox">
-          {currentSpot.price} per night
-          <div>
-            <i className="fas fa-star" />{currentSpot.avgStarRating > 0 ? currentSpot.avgStarRating : 'NEW'}
-          </div>
-          <div>
-            {currentSpot.numReviews} Reviews
+          <div className="sideboxprice">
+            ${currentSpot.price} per night
+           <> <i className="fas fa-star" />{currentSpot.avgStarRating > 0 ? currentSpot.avgStarRating.toFixed(1) : 'NEW'}</>
           </div>
           <div>
           <OpenModalButton
@@ -110,9 +111,12 @@ const SpotShow = () => {
       </div>
       <hr></hr>
       <h2>
-        {currentSpot.avgStarRating > 0 ? (<><i className="fas fa-star" /> {currentSpot.avgStarRating}</>) : ""}
+        {currentSpot.avgStarRating > 0 ? (<><i className="fas fa-star" /> {currentSpot.avgStarRating.toFixed(1)}</>) : ""}
         {
-          currentSpot.numReviews > 0 ?
+          currentSpot.numReviews == 1 ?
+          `· ${currentSpot.numReviews} Review`
+          :
+          currentSpot.numReviews > 1 ?
           `· ${currentSpot.numReviews} Reviews`
           :
           currentSpot.ownerId != userId && userId ?
@@ -142,7 +146,7 @@ const SpotShow = () => {
       </div>
       <div>
         {
-          currentSpot.ownerId != userId && userId && reviewExists ?
+          (currentSpot.ownerId != userId) && reviews.length < 1?
             <OpenModalButton
             buttonText="Post Your Review"
             modalComponent={<CreateReviewForm spotId={spotId}/>}

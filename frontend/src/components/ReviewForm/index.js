@@ -25,6 +25,12 @@ const ReviewForm = ({ spotId}) => {
     let reviews = {review, stars};
     dispatch(createReviews(reviews, spotId))
     .then(closeModal)
+    .catch(async (res) => {
+      const data = await res.json();
+      if (data && data.errors) {
+        setErrors(data.errors);
+      }
+    })
     .then(dispatch(fetchSpotIdReviews(spotId)));
     window.location.reload();
   }
@@ -51,6 +57,8 @@ const ReviewForm = ({ spotId}) => {
           <option value='5'>5</option>
         </select>
       </label>
+      <div>{errors.stars && <p>{errors.stars}</p>}</div>
+      <div>{errors.reviews && <p>{errors.reviews}</p>}</div>
       <button type="submit"
       disabled={
         review.length < 10

@@ -80,6 +80,7 @@ const SpotForm = ({ spot, formType}) => {
             onChange={(e)=> setAddress(e.target.value)}
           />
         </label>
+        <div>{errors.address && <p>{errors.address}</p>}</div>
       </div>
       <div>
         <label>
@@ -90,6 +91,7 @@ const SpotForm = ({ spot, formType}) => {
             onChange={(e)=> setCity(e.target.value)}
           />
         </label>
+        <div>{errors.city && <p>{errors.city}</p>}</div>
       </div>
       <div>
         <label>
@@ -100,6 +102,7 @@ const SpotForm = ({ spot, formType}) => {
             onChange={(e)=> setState(e.target.value)}
           />
         </label>
+        <div>{errors.state && <p>{errors.state}</p>}</div>
       </div>
       <div>
         <label>
@@ -110,6 +113,7 @@ const SpotForm = ({ spot, formType}) => {
             onChange={(e)=> setCountry(e.target.value)}
           />
         </label>
+        <div>{errors.country && <p>{errors.country}</p>}</div>
       </div>
       <div>
         <label>
@@ -121,6 +125,7 @@ const SpotForm = ({ spot, formType}) => {
             placeholder="OPTIONAL FOR MVP"
           />
         </label>
+        <div>{errors.lat && <p>{errors.lat}</p>}</div>
       </div>
       <div>
         <label>
@@ -132,6 +137,7 @@ const SpotForm = ({ spot, formType}) => {
             placeholder="OPTIONAL FOR MVP"
           />
         </label>
+        <div>{errors.lng && <p>{errors.lng}</p>}</div>
       </div>
       </div>
       <div>
@@ -150,6 +156,7 @@ const SpotForm = ({ spot, formType}) => {
             onChange={(e)=> setDescription(e.target.value)}
           />
           </label>
+          <div>{errors.description && <p>{errors.description}</p>}</div>
         </div>
       </div>
       <div>
@@ -166,6 +173,7 @@ const SpotForm = ({ spot, formType}) => {
           onChange={(e)=> setName(e.target.value)}
         />
       </label>
+      <div>{errors.name && <p>{errors.name}</p>}</div>
       </div>
       <div>
         <header>Set a base price for your spot</header>
@@ -181,6 +189,7 @@ const SpotForm = ({ spot, formType}) => {
           onChange={(e)=> setPrice(e.target.value)}
         />
       </label>
+      <div>{errors.price && <p>{errors.price}</p>}</div>
       </div>
       <div>
         <header>Liven up your spot with photos</header>

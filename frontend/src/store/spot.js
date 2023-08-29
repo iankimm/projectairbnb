@@ -188,7 +188,8 @@ const spotReducer = (state = {}, action) => {
       return {...state, spots: [...state.spots, action.spot] }
     case REMOVE_SPOT:
       return {
-        ...state
+        ...state,
+        spots: state.spots.filter(spot => spot.id !== action.spotId)
       }
     default:
       return state;

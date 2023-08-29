@@ -13,14 +13,19 @@ const DeleteSpotModal = ({spotId}) => {
 
   const images = useSelector(state => state.currentSpot.SpotImages)
 
+  //needs fix
   const handleSubmit = () => {
     dispatch(fetchImageById(spotId))
-    for(let i = 0; i < images.length; i++){
-      dispatch(deleteImages(images[i].id))
-    }
+    images.forEach(image => {
+      dispatch(deleteImages(image.id))
+    })
     dispatch(deleteSpots(spotId))
+    // for(let i = 0; i < images.length; i++){
+    //   dispatch(deleteImages(images[i].id))
+    // }
+    // dispatch(deleteSpots(spotId))
     .then(closeModal)
-    history.push('/users/manage');
+    // history.push('/users/manage');
   }
 
   useEffect(() => {
@@ -29,6 +34,8 @@ const DeleteSpotModal = ({spotId}) => {
 
   return (
     <form onSubmit={handleSubmit}>
+      <title>Are you sure you want to remove this spot?</title>
+      <div>Are you sure you want to remove this spot?</div>
     <div>
       <button className="RedButton" type='submit'>Yes (Delete Spot)</button>
     </div>

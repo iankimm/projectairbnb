@@ -56,7 +56,7 @@ function SignupFormModal() {
           />
         </label>
         </div>
-        {errors.email && <p>{errors.email}</p>}
+        {errors.email && <p>The provided email is invalid</p>}
         <div>
         <label>
 
@@ -69,7 +69,7 @@ function SignupFormModal() {
           />
         </label>
         </div>
-        {errors.username && <p>{errors.username}</p>}
+        {errors.username && <p>Username must be unique</p>}
         <div>
         <label>
 
