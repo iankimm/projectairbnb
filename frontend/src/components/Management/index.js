@@ -28,9 +28,6 @@ const Management = () => {
   useEffect(() => {
     dispatch(fetchSpots(spots))
     //if(mySpots.length < 1) setSpotExists(false);
-
-
-
   }, [dispatch])
 
 
@@ -47,6 +44,7 @@ const Management = () => {
                   <div>
                     <SpotIndexItem spot={spot} key={spot.id}/>
                     <button>Update</button>
+                    <UpdateSpot spot={spot} />
                     <OpenModalButton
                     buttonText="Delete"
                     modalComponent={<DeleteSpotModal spotId={spot.id}/>}/>

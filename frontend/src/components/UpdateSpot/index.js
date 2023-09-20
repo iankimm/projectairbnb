@@ -10,7 +10,7 @@ import { fetchImageById } from '../../store/image';
 import * as sessionActions from '../../store/spot'
 
 
-const UpdateSpot = ({ spot, formType}) => {
+const UpdateSpot = ({ spot }) => {
   const history = useHistory();
   const dispatch = useDispatch();
 
