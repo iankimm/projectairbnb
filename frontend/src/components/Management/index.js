@@ -43,7 +43,9 @@ const Management = () => {
                 return (
                   <div>
                     <SpotIndexItem spot={spot} key={spot.id}/>
-                    <button>Update</button>
+                    <Link to="/componentB">
+                      <button>Update</button>
+                    </Link>
                     <UpdateSpot spot={spot} />
                     <OpenModalButton
                     buttonText="Delete"
