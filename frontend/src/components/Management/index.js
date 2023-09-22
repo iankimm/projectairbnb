@@ -7,6 +7,7 @@ import UpdateSpot from '../UpdateSpot';
 import DeleteSpotModal from '../DeleteSpot';
 import OpenModalButton from '../OpenModalButton';
 import { fetchSpots } from '../../store/spot';
+import { Route } from 'react-router-dom/cjs/react-router-dom.min';
 
 const Management = () => {
 
@@ -42,8 +43,12 @@ const Management = () => {
               mySpots.map((spot) => {
                 return (
                   <div>
+                    bugs
+                    delete deleting pictures but not spot at first return
+                    update button to updatespot part
+                    updating fully
                     <SpotIndexItem spot={spot} key={spot.id}/>
-                    <Link to="/componentB">
+                    <Link to="/update">
                       <button>Update</button>
                     </Link>
                     <UpdateSpot spot={spot} />
