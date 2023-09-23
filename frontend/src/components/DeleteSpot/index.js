@@ -15,7 +15,7 @@ const DeleteSpotModal = ({spotId}) => {
 
   //needs fix
   const handleSubmit = () => {
-    dispatch(fetchImageById(spotId))
+    // dispatch(fetchImageById(spotId))
     // images.forEach(image => {
     //   dispatch(deleteImages(image.id))
     // })

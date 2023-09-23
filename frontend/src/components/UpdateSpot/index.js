@@ -3,9 +3,7 @@ import './UpdateSpot.css'
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { editSpot, insertSpot } from '../../store/spot';
-import { fetchSpotIdOwner } from '../../store/currentSpotOwner';
-import { fetchSpotIdReviews } from '../../store/review';
+import { editSpot } from '../../store/spot';
 import { fetchImageById } from '../../store/image';
 import { useEffect } from 'react';
 
@@ -38,18 +36,22 @@ const UpdateSpot = ({ spotId }) => {
     if(lat === '') setLat("0");
     if(lng === '') setLng("0");
 
-    const newSpot = {
-      address: address, city: city, state: state, country: country, lat: lat, lng: lng, name: name, description: description, price: price,
+    try {
+      const newSpot = {
+        address: address, city: city, state: state, country: country, lat: lat, lng: lng, name: name, description: description, price: price,
+      }
+
+      const updated = await dispatch(editSpot(spotId, newSpot
+        // previewImage, oneImage, twoImage, threeImage, fourImage
+      ))
+
+      if(updated) history.push(`/spots/${updated.id}`);
+    } catch(res) {
+      const data = await res.json();
+      const merged = {...data.errors}
+      setErrors(merged);
+      console.log('errors', merged)
     }
-    console.log('newSpot', newSpot);
-
-    const updated = await dispatch(editSpot(spotId, newSpot
-      // previewImage, oneImage, twoImage, threeImage, fourImage
-    ))
-    console.log('updated',updated);
-
-    if(updated) history.push(`/spots/${updated.id}`);
-
     // if(lat === '') setLat("0");
     // if(lng === '') setLng("0");
     // //needs to be added to state
@@ -87,6 +89,15 @@ const UpdateSpot = ({ spotId }) => {
     <form onSubmit={handleSubmit} className="spotformform">
       <title>Update your Spot</title>
       <h2>Update your Spot</h2>
+      <div>
+        {
+          Object.keys(errors).length > 0 ? (
+            Object.keys(errors).map((key) => (
+              <p>{errors[key]}</p>
+            ))
+          ) : ""
+        }
+      </div>
       <div>
         <header>Where's your place located?</header>
         <div>
