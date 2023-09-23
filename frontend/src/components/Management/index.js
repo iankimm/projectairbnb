@@ -48,9 +48,9 @@ const Management = () => {
               mySpots.map((spot) => {
                 return (
                   <div>
-                    bugs
+                    {/* bugs
                     delete deleting pictures but not spot at first return
-                    updating fully
+                    updating fully */}
                     <SpotIndexItem spot={spot} key={spot.id}/>
                     <button className="update-button" onClick={(e) => {
                       e.stopPropagation();
