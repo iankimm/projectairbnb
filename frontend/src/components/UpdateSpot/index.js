@@ -8,27 +8,39 @@ import { fetchSpotIdOwner } from '../../store/currentSpotOwner';
 import { fetchSpotIdReviews } from '../../store/review';
 import { fetchImageById } from '../../store/image';
 import * as sessionActions from '../../store/spot'
+import { useEffect } from 'react';
 
 
-const UpdateSpot = ({ spot }) => {
+const UpdateSpot = ({ spotId }) => {
   const history = useHistory();
   const dispatch = useDispatch();
 
   //spot information
-  const [address, setAddress] = useState(spot.address);
-  const [city, setCity] = useState(spot.city);
-  const [state, setState] = useState(spot.state);
-  const [country, setCountry] = useState(spot.country);
-  const [lat, setLat] = useState(spot.lat);
-  const [lng, setLng] = useState(spot.lng);
-  const [name, setName] = useState(spot.name);
-  const [description, setDescription] = useState(spot.description);
-  const [price, setPrice] = useState(spot.price);
+  const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [country, setCountry] = useState("");
+  const [lat, setLat] = useState("");
+  const [lng, setLng] = useState("");
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState("");
   const [previewImage, setPreviewImage] = useState('');
   const [oneImage, setOneImage] = useState('');
   const [twoImage, setTwoImage] = useState('');
   const [threeImage, setThreeImage] = useState('');
   const [fourImage, setFourImage] = useState('');
+  const [details, setDetails] = useState({
+    country: "",
+    address: "",
+    city: "",
+    state: "",
+    lat: "",
+    lng: "",
+    description: "",
+    name: "",
+    price: "",
+  })
 
   const [errors, setErrors] = useState({});
 
@@ -40,7 +52,7 @@ const UpdateSpot = ({ spot }) => {
       if(lat === '') setLat("0");
       if(lng === '') setLng("0");
       return dispatch(
-        sessionActions.editSpot(spot.id, {
+        sessionActions.editSpot(spotId, {
           address, city, state, country, lat, lng, name, description, price, previewImage, oneImage, twoImage, threeImage, fourImage
         })
       )
@@ -61,6 +73,30 @@ const UpdateSpot = ({ spot }) => {
     // const spotId = createdSpot.id;
     // history.push(`/spots/${spotId}`);
   }
+
+  useEffect(() => {
+    dispatch(fetchImageById(spotId))
+    .then((existingSpot) => {
+      if(existingSpot) {
+        //console.log(existingSpot)
+        setAddress(existingSpot.address)
+        setCity(existingSpot.city)
+        setCountry(existingSpot.country)
+        setDescription(existingSpot.description)
+        setLat(existingSpot.lat)
+        setLng(existingSpot.lng)
+        setName(existingSpot.name)
+        setPrice(existingSpot.price)
+        setState(existingSpot.state)
+        //console.log(existingSpot.SpotImages[0])
+        if(existingSpot.SpotImages[0]) setPreviewImage(existingSpot.SpotImages[0].url)
+        if(existingSpot.SpotImages[1]) setOneImage(existingSpot.SpotImages[1].url)
+        if(existingSpot.SpotImages[2]) setTwoImage(existingSpot.SpotImages[2].url)
+        if(existingSpot.SpotImages[3]) setThreeImage(existingSpot.SpotImages[3].url)
+        if(existingSpot.SpotImages[4]) setFourImage(existingSpot.SpotImages[4].url)
+      }
+    })
+  }, [dispatch, spotId])
 
   return (
     <form onSubmit={handleSubmit} className="spotformform">
@@ -191,30 +227,35 @@ const UpdateSpot = ({ spot }) => {
           <input
           type="text"
           placeholder='Preview Image URL'
+          value={previewImage}
           onChange={(e) => setPreviewImage(e.target.value)}
           required />
           <div>
             <input
             type="text"
             placeholder='Image URL'
+            value={oneImage}
             onChange={(e) => setOneImage(e.target.value)} />
           </div>
           <div>
             <input
             type="text"
             placeholder='Image URL'
+            value={twoImage}
             onChange={(e) => setTwoImage(e.target.value)} />
           </div>
           <div>
             <input
             type="text"
             placeholder='Image URL'
+            value={threeImage}
             onChange={(e) => setThreeImage(e.target.value)} />
           </div>
           <div>
             <input
             type="text"
             placeholder='Image URL'
+            value={fourImage}
             onChange={(e) => setFourImage(e.target.value)} />
           </div>
         </div>

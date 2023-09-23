@@ -41,8 +41,14 @@ function App() {
       <Switch>
         <Route exact path='/' component={SpotIndex} />
         <Route path='/spots/new' component={CreateSpotForm} />
-        <Route path='/spots/:spotId' component={SpotShow} />
         <Route path='/users/manage' component = {Management} />
+        <Route path="/spots/:spotId/update" render={(props) => {
+          const spotId = props.match.params.spotId;
+          return (
+            <UpdateSpot {...props} spotId={spotId} mode="update" />
+          )
+        }} />
+        <Route path='/spots/:spotId' component={SpotShow} />
       </Switch>
     </>
   );

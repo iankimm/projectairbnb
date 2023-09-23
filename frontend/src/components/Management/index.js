@@ -7,9 +7,10 @@ import UpdateSpot from '../UpdateSpot';
 import DeleteSpotModal from '../DeleteSpot';
 import OpenModalButton from '../OpenModalButton';
 import { fetchSpots } from '../../store/spot';
-import { Route } from 'react-router-dom/cjs/react-router-dom.min';
+import { Route, useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 const Management = () => {
+  const history = useHistory();
 
   const dispatch = useDispatch();
 
@@ -24,6 +25,10 @@ const Management = () => {
     spots.forEach(spot => {
       if(spot.ownerId === currentUser.id) mySpots.push(spot)
     })
+  }
+
+  const handleUpdate = (spotId) => {
+    history.push(`/spots/${spotId}/update`, {method : "PUT"});
   }
 
   useEffect(() => {
@@ -48,10 +53,10 @@ const Management = () => {
                     update button to updatespot part
                     updating fully
                     <SpotIndexItem spot={spot} key={spot.id}/>
-                    <Link to="/update">
-                      <button>Update</button>
-                    </Link>
-                    <UpdateSpot spot={spot} />
+                    <button className="update-button" onClick={(e) => {
+                      e.stopPropagation();
+                      handleUpdate(spot.id);
+                    }}> Update </button>
                     <OpenModalButton
                     buttonText="Delete"
                     modalComponent={<DeleteSpotModal spotId={spot.id}/>}/>
