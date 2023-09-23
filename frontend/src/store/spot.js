@@ -16,9 +16,9 @@ const receiveSpot = (spot) => ({
   spot
 })
 
-const updateSpot = (spot) => ({
+const updateSpot = (update) => ({
   type: UPDATE_SPOT,
-  spot
+  update
 })
 
 const removeSpot = (spotId) => ({
@@ -129,7 +129,7 @@ export const insertSpot = (payload) => async (dispatch) => {
 
 
 export const editSpot = (spotId, payload) => async (dispatch) => {
-  const response = await csrfFetch(`/api/spots/${payload}`, {
+  const response = await csrfFetch(`/api/spots/${spotId}`, {
     method: "PUT",
     headers: {
       "Content-Type" : "application/json"
@@ -185,7 +185,11 @@ const spotReducer = (state = {}, action) => {
     case RECEIVE_SPOT:
       return {...state, spots: [...state.spots, action.spot]}
     case UPDATE_SPOT:
-      return {...state, spots: [...state.spots, action.spot] }
+      // return {...state, spots: state.spots.map((spot) =>
+      //   // spot.id === action.update.id ? action.update : spot
+      //   spot
+      // )}
+      return {...state}
     case REMOVE_SPOT:
       return {
         ...state,

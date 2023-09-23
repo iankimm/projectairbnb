@@ -3,11 +3,10 @@ import './UpdateSpot.css'
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { insertSpot } from '../../store/spot';
+import { editSpot, insertSpot } from '../../store/spot';
 import { fetchSpotIdOwner } from '../../store/currentSpotOwner';
 import { fetchSpotIdReviews } from '../../store/review';
 import { fetchImageById } from '../../store/image';
-import * as sessionActions from '../../store/spot'
 import { useEffect } from 'react';
 
 
@@ -36,23 +35,20 @@ const UpdateSpot = ({ spotId }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (e) {
-      setErrors({});
-      if(lat === '') setLat("0");
-      if(lng === '') setLng("0");
-      return dispatch(
-        sessionActions.editSpot(spotId, {
-          address, city, state, country, lat, lng, name, description, price, previewImage, oneImage, twoImage, threeImage, fourImage
-        })
-      )
-        .then(response => history.push(`/spots/${response.id}`))
-        .catch(async (res) => {
-          const data = await res.json();
-          if (data && data.errors) {
-            setErrors(data.errors);
-          }
-        });
+    if(lat === '') setLat("0");
+    if(lng === '') setLng("0");
+
+    const newSpot = {
+      address: address, city: city, state: state, country: country, lat: lat, lng: lng, name: name, description: description, price: price,
     }
+    console.log('newSpot', newSpot);
+
+    const updated = await dispatch(editSpot(spotId, newSpot
+      // previewImage, oneImage, twoImage, threeImage, fourImage
+    ))
+    console.log('updated',updated);
+
+    if(updated) history.push(`/spots/${updated.id}`);
 
     // if(lat === '') setLat("0");
     // if(lng === '') setLng("0");
@@ -250,7 +246,7 @@ const UpdateSpot = ({ spotId }) => {
         </div>
       </div>
 
-      <button type="submit">Create Spot</button>
+      <button type="submit">Update Your Spot</button>
     </form>
   )
 }

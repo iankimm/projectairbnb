@@ -34,7 +34,6 @@ function LoginFormModal() {
   const demoLogin = () => {
     const demoId = 'iankimm';
     const demoPw = 'password';
-
     return dispatch(sessionActions.login({ credential: demoId, password: demoPw }))
       .then(closeModal)
       .then(history.push('/'))
