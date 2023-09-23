@@ -50,7 +50,6 @@ const Management = () => {
                   <div>
                     bugs
                     delete deleting pictures but not spot at first return
-                    update button to updatespot part
                     updating fully
                     <SpotIndexItem spot={spot} key={spot.id}/>
                     <button className="update-button" onClick={(e) => {

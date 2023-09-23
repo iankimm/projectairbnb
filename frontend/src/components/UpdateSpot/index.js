@@ -30,17 +30,6 @@ const UpdateSpot = ({ spotId }) => {
   const [twoImage, setTwoImage] = useState('');
   const [threeImage, setThreeImage] = useState('');
   const [fourImage, setFourImage] = useState('');
-  const [details, setDetails] = useState({
-    country: "",
-    address: "",
-    city: "",
-    state: "",
-    lat: "",
-    lng: "",
-    description: "",
-    name: "",
-    price: "",
-  })
 
   const [errors, setErrors] = useState({});
 
