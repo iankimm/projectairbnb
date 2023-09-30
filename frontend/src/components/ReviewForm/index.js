@@ -13,7 +13,7 @@ const ReviewForm = ({ spotId}) => {
 
   //review information
   const [review, setReview] = useState('');
-  const [stars, setStars] = useState(1);
+  const [stars, setStars] = useState('');
 
   const [errors, setErrors] = useState({});
 
@@ -51,6 +51,15 @@ const ReviewForm = ({ spotId}) => {
       </label>
       <label>
         Stars :
+        <input
+          type="text"
+          value={stars}
+          placeholder="1 - 5"
+          onChange={(e) => setStars(e.target.value)}
+        />
+      </label>
+      {/* <label>
+        Stars :
         <select onChange={e => setStars(e.target.value)}>
           <option value='1'>1</option>
           <option value='2'>2</option>
@@ -58,10 +67,12 @@ const ReviewForm = ({ spotId}) => {
           <option value='4'>4</option>
           <option value='5'>5</option>
         </select>
-      </label>
+      </label> */}
       <button type="submit"
       disabled={
-        review.length < 10
+        review.length < 10 ||
+        stars.length < 1 ||
+        (parseInt(stars) < 1 || parseInt(stars) > 5)
       }>Submit Your Review</button>
     </form>
   )

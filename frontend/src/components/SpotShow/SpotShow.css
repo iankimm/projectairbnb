@@ -1,6 +1,5 @@
 .imagebox {
   display: flex;
-  max-width: 1000px;
   margin: auto;
   padding: 10px 0 10px 0;
 }
@@ -40,12 +39,15 @@
 }
 
 .SpotDetailPreview {
-  height : 310px;
+  height : auto;
+  width: auto;
+  max-height: 310px;
+  max-width: 460px;
 }
 
 .SpotDetailSmallImages {
-  height : 150px;
-  width : 250px;
+  max-height : 150px;
+  max-width : 230px;
 }
 
 .smallImages {

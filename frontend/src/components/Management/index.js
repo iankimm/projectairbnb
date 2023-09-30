@@ -33,7 +33,7 @@ const Management = () => {
 
   useEffect(() => {
     dispatch(fetchSpots(spots))
-    //if(mySpots.length < 1) setSpotExists(false);
+    if(mySpots.length < 1) setSpotExists(false);
   }, [dispatch])
 
 

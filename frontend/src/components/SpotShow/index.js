@@ -112,6 +112,9 @@ const SpotShow = () => {
            <> <i className="fas fa-star" />{currentSpot.avgStarRating > 0 ? currentSpot.avgStarRating.toFixed(1) : 'NEW'}</>
           </div>
           <div>
+            Reviews: {currentSpot.numReviews}
+          </div>
+          <div>
           <OpenModalButton
             buttonText="Reserve"
             modalComponent={<div>Feature coming soon</div>}
@@ -129,13 +132,13 @@ const SpotShow = () => {
           currentSpot.numReviews > 1 ?
           `· ${currentSpot.numReviews} Reviews`
           :
-          currentSpot.ownerId != userId && userId ?
-          " Be the first to post a review!" : ""
+          <div>{currentSpot.ownerId != userId && userId ?
+          " Be the first to post a review!" : ""}</div>
         }
       </h2>
       <div>
         {
-          !postReviewChecker ?
+          !postReviewChecker && !(user.user === null)?
             <OpenModalButton
             buttonText="Post Your Review"
             modalComponent={<CreateReviewForm spotId={spotId}/>}

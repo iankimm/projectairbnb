@@ -21,7 +21,7 @@ function App() {
 
   //app.js
   return (
-    <>
+    <div className='whole'>
     <div className='container'>
       <div className="header">
         <Link to='/'>
@@ -50,7 +50,7 @@ function App() {
         }} />
         <Route path='/spots/:spotId' component={SpotShow} />
       </Switch>
-    </>
+    </div>
   );
 }
 

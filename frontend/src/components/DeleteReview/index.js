@@ -17,7 +17,7 @@ const DeleteReviewModal = ({reviewId}) => {
 
   return (
     <form onSubmit={handleSubmit}>
-    <div>Confirm Delete</div>
+    <h1>Confirm Delete</h1>
     <div>Are you sure you want to delte this review?</div>
     <div>
       <button className="RedButton" type='submit'>Yes (Delete Review)</button>

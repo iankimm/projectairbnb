@@ -12,3 +12,23 @@
   color: #F5A;
   font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
 }
+
+.whole {
+  max-width:1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+@media (max-width: 430px) and (min-width:200px) {
+  .whole {
+    width: 80%;
+  }
+}
+
+@media(max-width:200px) {
+  .whole {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+}
