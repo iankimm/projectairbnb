@@ -37,6 +37,7 @@ const Management = () => {
   }, [dispatch])
 
 
+
   return (
     <div>
       <header>Manage Spots</header>
@@ -56,9 +57,13 @@ const Management = () => {
                       e.stopPropagation();
                       handleUpdate(spot.id);
                     }}> Update </button>
-                    <OpenModalButton
-                    buttonText="Delete"
-                    modalComponent={<DeleteSpotModal spotId={spot.id}/>}/>
+                    {/* <button onClick={(e) => {
+                      e.stopPropagation();
+                      handleDelete(spot.id)
+                    }}>Delete</button> */}
+                     <OpenModalButton
+                     buttonText="Delete"
+                     modalComponent={<DeleteSpotModal spotId={spot.id}/>}/>
                   </div>
                 )
               })
