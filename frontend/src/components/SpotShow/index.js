@@ -39,17 +39,31 @@ const SpotShow = () => {
 
   const currentSpot = useSelector(state => state.currentSpot)
 
+
+
   //need to add images
   useEffect(() => {
     dispatch(fetchSpotIdOwner(spotId))
     dispatch(fetchSpotIdReviews(spotId))
     dispatch(fetchImageById(spotId))
 
-    reviews.forEach(review => {
-      if(parseInt(userId) == parseInt(review.userId)) {setReviewExists(true)}
-    })
-
   },[dispatch, reviewExists])
+
+  //checking cases
+  let reviewTracker = false;
+  let postReviewChecker = false;
+
+  //false is right user doesnt match with owner, if true do not show
+  if(reviews.length > 0 && user.user && currentSpot){
+    reviews.forEach(review => {
+
+      if(review.userId === user.user.id && currentSpot.id === review.spotId) reviewTracker = true;
+    })
+  }
+
+  if(user.user && owner){
+    postReviewChecker = user && owner.id === user.user.id || reviewTracker;
+  }
 
 
   return (
@@ -121,7 +135,7 @@ const SpotShow = () => {
       </h2>
       <div>
         {
-          currentSpot.ownerId != userId && !reviewExists && userId ?
+          !postReviewChecker ?
             <OpenModalButton
             buttonText="Post Your Review"
             modalComponent={<CreateReviewForm spotId={spotId}/>}
