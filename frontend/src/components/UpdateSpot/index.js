@@ -1,6 +1,6 @@
 import './UpdateSpot.css'
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { editSpot } from '../../store/spot';
@@ -36,21 +36,24 @@ const UpdateSpot = ({ spotId }) => {
     if(lat === '') setLat("0");
     if(lng === '') setLng("0");
 
-    try {
-      const newSpot = {
-        address: address, city: city, state: state, country: country, lat: lat, lng: lng, name: name, description: description, price: price,
-      }
+    const newSpot = {
+      address: address, city: city, state: state, country: country, lat: lat, lng: lng, name: name, description: description, price: price,
+    }
 
+    try {
       const updated = await dispatch(editSpot(spotId, newSpot
         // previewImage, oneImage, twoImage, threeImage, fourImage
       ))
 
-      if(updated) history.push(`/spots/${updated.id}`);
+      history.push(`/spots/${updated.id}`);
+
     } catch(res) {
+      console.log('res', res);
       const data = await res.json();
-      const merged = {...data.errors}
-      setErrors(merged);
-      console.log('errors', merged)
+      if(data){
+        const merged = {...data.errors}
+        setErrors(merged);
+      }
     }
     // if(lat === '') setLat("0");
     // if(lng === '') setLng("0");

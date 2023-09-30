@@ -138,7 +138,7 @@ export const editSpot = (spotId, payload) => async (dispatch) => {
   });
   const spot = await response.json();
   if(response.ok) {
-    dispatch(updateSpot(spot));
+    dispatch(updateSpot(response));
   }
   return spot;
 }
@@ -189,7 +189,12 @@ const spotReducer = (state = {}, action) => {
       //   // spot.id === action.update.id ? action.update : spot
       //   spot
       // )}
-      return {...state}
+      return {...state,
+      // spots: state.spots.map((spot) =>
+      // // spot.id === action.update.id ? action.update : spot
+      // console.log('spot', spot)
+      // )
+      }
     case REMOVE_SPOT:
       return {
         ...state
