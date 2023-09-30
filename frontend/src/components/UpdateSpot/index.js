@@ -1,9 +1,9 @@
 import './UpdateSpot.css'
 
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { editSpot } from '../../store/spot';
+import { editSpot, fetchSpots } from '../../store/spot';
 import { fetchImageById } from '../../store/image';
 import { useEffect } from 'react';
 
@@ -11,6 +11,8 @@ import { useEffect } from 'react';
 const UpdateSpot = ({ spotId }) => {
   const history = useHistory();
   const dispatch = useDispatch();
+
+  const spots = useSelector(state => Object.values(state.spots))
 
   //spot information
   const [address, setAddress] = useState("");
@@ -44,7 +46,6 @@ const UpdateSpot = ({ spotId }) => {
       const updated = await dispatch(editSpot(spotId, newSpot
         // previewImage, oneImage, twoImage, threeImage, fourImage
       ))
-
       history.push(`/spots/${updated.id}`);
 
     } catch(res) {
@@ -65,6 +66,7 @@ const UpdateSpot = ({ spotId }) => {
   }
 
   useEffect(() => {
+    dispatch(fetchSpots(spots))
     dispatch(fetchImageById(spotId))
     .then((existingSpot) => {
       if(existingSpot) {

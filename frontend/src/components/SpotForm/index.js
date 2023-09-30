@@ -1,7 +1,7 @@
 import './SpotForm.css'
 
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { insertSpot } from '../../store/spot';
 import { fetchSpotIdOwner } from '../../store/currentSpotOwner';
@@ -13,6 +13,8 @@ import * as sessionActions from '../../store/spot'
 const SpotForm = ({ spot, formType}) => {
   const history = useHistory();
   const dispatch = useDispatch();
+
+  const spots = useSelector(state => Object.values(state.spots))
 
   //spot information
   const [address, setAddress] = useState('');
@@ -31,6 +33,10 @@ const SpotForm = ({ spot, formType}) => {
   const [fourImage, setFourImage] = useState('');
 
   const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    dispatch(sessionActions.fetchSpots(spots))
+  },[dispatch])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
