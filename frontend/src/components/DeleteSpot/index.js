@@ -32,11 +32,11 @@ const DeleteSpotModal = ({spotId}) => {
   },[])
 
   return (
-    <form>
+    <form className="deleteForm">
       <title>Are you sure you want to remove this spot?</title>
       <h1>Confirm Delete</h1>
-      <div>Are you sure you want to remove this spot?</div>
-      <div>
+      <div className="comment">Are you sure you want to remove this spot?</div>
+      <div calssName="paddingneed">
         <button className="RedButton" onClick={handleSubmit}>Yes (Delete Spot)</button>
       </div>
       <div>

@@ -104,53 +104,63 @@ const UpdateSpot = ({ spotId }) => {
         }
       </div>
       <div>
-        <header>Where's your place located?</header>
+      <div className="spotformtitle">Where's your place located?</div>
         <div>
           Guest will only get your exact address once they booked a reservation
         </div>
+        <br></br>
         <div>
-          <label>
-          address:
-          <input
-            type="text"
-            value={address}
-            onChange={(e)=> setAddress(e.target.value)}
-          />
-        </label>
-      </div>
-      <div>
         <label>
-          city:
-          <input
-            type="text"
-            value={city}
-            onChange={(e)=> setCity(e.target.value)}
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          state:
-          <input
-            type="text"
-            value={state}
-            onChange={(e)=> setState(e.target.value)}
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          country:
+          <div>
+          Country:
+          </div>
           <input
             type="text"
             value={country}
             onChange={(e)=> setCountry(e.target.value)}
           />
         </label>
+        </div>
+        <div>
+          <label>
+            <div>
+              Address:
+            </div>
+          <input
+            type="text"
+            value={address}
+            onChange={(e)=> setAddress(e.target.value)}
+            placeholder="address"
+          />
+        </label>
+
       </div>
+        <label>
+          <div>
+            City:
+          </div>
+          <input
+            type="text"
+            value={city}
+            onChange={(e)=> setCity(e.target.value)}
+            placeholder="city"
+          />
+        </label>
+        <label>
+          ,
+          <input
+            type="text"
+            value={state}
+            onChange={(e)=> setState(e.target.value)}
+            placeholder="state"
+          />
+        </label>
+
       <div>
         <label>
+          <div>
           Latitude:
+          </div>
           <input
             type="text"
             value={lat}
@@ -158,10 +168,13 @@ const UpdateSpot = ({ spotId }) => {
             placeholder="OPTIONAL FOR MVP"
           />
         </label>
+
       </div>
       <div>
         <label>
-          longitude:
+          <div>
+          Longitude:
+          </div>
           <input
             type="text"
             value={lng}
@@ -169,16 +182,17 @@ const UpdateSpot = ({ spotId }) => {
             placeholder="OPTIONAL FOR MVP"
           />
         </label>
+
       </div>
       </div>
+      <hr></hr>
       <div>
-        <header>Describe your place to guests</header>
+        <div className="spotformtitle">Describe your place to guests</div>
         <div>
-          Mention the best features of your space, any special amentities like fast wifi or parking, and what you love about the nieghborhood.
+          Mention the best features of your space, any special amentities like <br></br>fast wifi or parking, and what you love about the nieghborhood.
         </div>
         <div>
           <label>
-          description:
           <input
             className="descriptionbox"
             type="text"
@@ -187,15 +201,16 @@ const UpdateSpot = ({ spotId }) => {
             onChange={(e)=> setDescription(e.target.value)}
           />
           </label>
+
         </div>
       </div>
+      <hr></hr>
       <div>
-        <header>Create a title for your spot</header>
+        <div className="spotformtitle">Create a title for your spot</div>
         <div>
-          Catch guests' attention with a spot title that highlights what makes your place special.
+          Catch guests' attention with a spot title that highlights what makes<br></br> your place special.
         </div>
         <label>
-        name:
         <input
           type="text"
           value={name}
@@ -203,66 +218,70 @@ const UpdateSpot = ({ spotId }) => {
           onChange={(e)=> setName(e.target.value)}
         />
       </label>
+
       </div>
+      <hr></hr>
       <div>
-        <header>Set a base price for your spot</header>
+      <div className="spotformtitle">Set a base price for your spot</div>
         <div>
-          Competitive pricing can help your listing stand out and rank higher in search results.
+          Competitive pricing can help your listing stand out and rank higher<br></br> in search results.
         </div>
         <label>
-        price:
+        $
         <input
           type="text"
           value={price}
-          placeholder='Price per night (USE)'
+          placeholder='Price per night (USD)'
           onChange={(e)=> setPrice(e.target.value)}
         />
       </label>
+
       </div>
+      <hr></hr>
       <div>
-        <header>Liven up your spot with photos</header>
+      <div className="spotformtitle">Liven up your spot with photos</div>
         <div>
           Submit a link to at least one photo to publish your spot
         </div>
         <div>
           <input
           type="text"
-          placeholder='Preview Image URL'
           value={previewImage}
           onChange={(e) => setPreviewImage(e.target.value)}
           required />
           <div>
             <input
             type="text"
-            placeholder='Image URL'
             value={oneImage}
+            placeholder='Image URL'
             onChange={(e) => setOneImage(e.target.value)} />
           </div>
           <div>
             <input
             type="text"
-            placeholder='Image URL'
             value={twoImage}
+            placeholder='Image URL'
             onChange={(e) => setTwoImage(e.target.value)} />
           </div>
           <div>
             <input
             type="text"
-            placeholder='Image URL'
             value={threeImage}
+            placeholder='Image URL'
             onChange={(e) => setThreeImage(e.target.value)} />
           </div>
           <div>
             <input
             type="text"
-            placeholder='Image URL'
             value={fourImage}
+            placeholder='Image URL'
             onChange={(e) => setFourImage(e.target.value)} />
           </div>
         </div>
       </div>
+      <hr></hr>
 
-      <button type="submit">Update Your Spot</button>
+      <button type="submit">Create Spot</button>
     </form>
   )
 }

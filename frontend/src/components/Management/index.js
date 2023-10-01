@@ -44,7 +44,7 @@ const Management = () => {
       {
         spotExists
         ?
-        <div>
+        <div className="managementContainer">
             {
               mySpots.map((spot) => {
                 return (

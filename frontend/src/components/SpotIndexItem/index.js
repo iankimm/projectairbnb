@@ -24,7 +24,7 @@ const SpotIndexItem = ({spot}) => {
               <div>No Image available</div>
           }
         <div>
-          {spot.city}, {spot.state} {averageRating > 0 ? (<><i className="fas fa-star" /> {averageRating}</>) : <><i className="fas fa-star" /> NEW</>}
+          {spot.city}, {spot.state} {averageRating > 0 ? (<span className= "rightEnd"><i className="fas fa-star" /> {averageRating}</span>) : <span className= "rightEnd"><i className="fas fa-star" /> NEW</span>}
         </div>
         <div>
           ${spot.price} night
