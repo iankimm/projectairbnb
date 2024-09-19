@@ -74,4 +74,16 @@ function Navigation({ isLoaded }) {
     return () => document.removeEventListener("click", closeMenu);
   }, [showMenu]);
 
+  const closeMenu = () => setShowMenu(false);
+
+  return (
+    <div className='dropdown'>
+      {isLoaded && newSpot}
+      <ul className="usermenu">
+        {isLoaded && sessionLinks}
+      </ul>
+    </div>
+  );
+}
+
 export default Navigation;
